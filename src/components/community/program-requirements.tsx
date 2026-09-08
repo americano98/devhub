@@ -1,0 +1,173 @@
+import { SectionKicker } from "@/components/products/section-kicker";
+
+const membership = [
+  {
+    label: "Share knowledge",
+    title: "Create and share technical content.",
+    items: [
+      "Write thought-leadership blogs and technical guides",
+      "Publish video demonstrations and tutorials",
+      "Post product breakdowns and tips on social media",
+    ],
+  },
+  {
+    label: "Build community",
+    title: "Help create an active, welcoming, and connected community.",
+    items: [
+      "Speak at industry conferences and data meetups",
+      "Answer questions and share experiences on Reddit",
+      "Engage actively in the official Databricks Community forum",
+    ],
+  },
+  {
+    label: "Grow the ecosystem",
+    title: "Help grow the Databricks developer community.",
+    items: [
+      "Organize local or virtual Databricks meetups",
+      "Develop courses and webinars to educate users",
+      "Expand the global developer footprint",
+    ],
+  },
+  {
+    label: "Shape the future",
+    title: "Support and help shape the Databricks and the MVP program.",
+    items: [
+      "Champion new products and feature releases",
+      "Provide candid feedback on what is and isn't working",
+      "Collaborate with fellow MVPs to refine and publish content",
+    ],
+  },
+];
+
+export function MVPRequirements() {
+  return (
+    <section
+      aria-labelledby="membership-requirements"
+      className="mx-auto max-w-320 px-5 pt-24 md:px-8 md:pt-32 xl:pt-40"
+    >
+      <SectionKicker className="text-grey-40">
+        Membership Requirements
+      </SectionKicker>
+      <h2
+        id="membership-requirements"
+        className="mt-6 max-w-192 text-3xl/[1.25] font-normal tracking-[-0.04em] md:text-4xl/[1.25] xl:text-[2.75rem]/[1.25]"
+      >
+        How Databricks MVPs contribute to the community.{" "}
+        <span className="text-grey-40">
+          MVPs share knowledge and grow the ecosystem.
+        </span>
+      </h2>
+      <div className="mt-14 flex flex-col gap-14 lg:mt-20 lg:gap-18">
+        {membership.map(({ label, title, items }, index) => (
+          <article
+            key={label}
+            className="grid gap-6 lg:grid-cols-[256px_1fr] lg:gap-16"
+          >
+            <div className="pt-4">
+              <SectionKicker index={`0${index + 1}`} className="text-black!">
+                {label}
+              </SectionKicker>
+            </div>
+            <div className="relative grid gap-6 border-t border-black/10 pt-4 lg:min-h-39.75 lg:grid-cols-[320px_1fr] lg:gap-16 lg:border-0">
+              <img
+                src="/img/community/membership-rule.svg"
+                alt=""
+                aria-hidden="true"
+                width={897}
+                height={41}
+                className="pointer-events-none absolute top-0 left-0 hidden h-10 w-full lg:block"
+              />
+              <h3 className="text-xl/[1.5] font-normal tracking-tight">
+                {title}
+              </h3>
+              <ul className="text-grey-40 flex flex-col gap-3 text-base/6 tracking-tight lg:pt-13.5">
+                {items.map((item) => (
+                  <li className="flex items-start gap-2.5" key={item}>
+                    <span
+                      className="bg-orange mt-2 size-2 shrink-0"
+                      aria-hidden="true"
+                    />
+                    <span>{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+const pathways = [
+  {
+    label: "Skills",
+    title: "Build hands-on skills with tools used by real teams.",
+    items: [
+      "Work with the Databricks Data Intelligence Platform",
+      "Build projects using real data and AI workflows",
+      "Learn through practical, hands-on challenges",
+      "Develop skills across data, analytics, and AI",
+    ],
+  },
+  {
+    label: "Leadership",
+    title: "Bring data and AI to life on your campus.",
+    items: [
+      "Organize hackathons and technical workshops",
+      "Host talks, meetups, and study groups",
+      "Connect Databricks experts with students",
+      "Build a community around emerging technologies",
+    ],
+  },
+];
+
+export function StudentPathways() {
+  return (
+    <section
+      aria-labelledby="career-pathways"
+      className="mx-auto max-w-320 px-5 pt-24 md:px-8 md:pt-32 xl:pt-40"
+    >
+      <SectionKicker className="text-grey-40">Career launchpad</SectionKicker>
+      <h2
+        id="career-pathways"
+        className="mt-6 max-w-200 text-3xl/[1.25] font-normal tracking-[-0.04em] md:text-4xl/[1.25] xl:text-[2.75rem]/[1.25]"
+      >
+        Take your skills into the real world.{" "}
+        <span className="text-grey-40">
+          Build experience and explore career pathways.
+        </span>
+      </h2>
+      <div className="mt-14 flex flex-col gap-16 lg:mt-20">
+        {pathways.map(({ label, title, items }, index) => (
+          <article key={label}>
+            <div className="grid items-start gap-6 border-b border-black/10 pb-6 lg:grid-cols-[448px_1fr] lg:gap-16">
+              <div className="pt-2">
+                <SectionKicker index={`0${index + 1}`} className="text-black!">
+                  {label}
+                </SectionKicker>
+              </div>
+              <h3 className="text-2xl/[1.5] font-normal tracking-[-0.04em] xl:text-[1.75rem]/[1.5]">
+                {title}
+              </h3>
+            </div>
+            <ul className="text-grey-40 lg:ml-128">
+              {items.map((item) => (
+                <li
+                  className="flex items-start gap-2.5 border-b border-black/10 py-6 text-base/6 tracking-[-0.04em] last:border-0 last:pb-0"
+                  key={item}
+                >
+                  <span
+                    className="bg-orange mt-2 size-2 shrink-0"
+                    aria-hidden="true"
+                  />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+          </article>
+        ))}
+      </div>
+    </section>
+  );
+}

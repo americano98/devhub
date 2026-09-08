@@ -19,6 +19,7 @@
     --db-lava-lightest: #ff9488;
     --db-cyan: #7dd3fc;
     --db-oat-light: #f2f0ed;
+    --db-paper: #f9f7f4;
     --db-oat-medium: #eeede9;
     --db-bg: #f9f7f4;
     --db-card: #ffffff;
@@ -232,6 +233,7 @@
   --color-db-lava-lightest: var(--db-lava-lightest);
   --color-db-cyan: var(--db-cyan);
   --color-db-oat-light: var(--db-oat-light);
+  --color-db-paper: var(--db-paper);
   --color-db-oat-medium: var(--db-oat-medium);
   --color-db-bg: var(--db-bg);
   --color-db-card: var(--db-card);

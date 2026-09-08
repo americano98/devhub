@@ -9,6 +9,11 @@ module.exports = {
   generateRobotsTxt: true,
   trailingSlash: false,
   exclude: ["/hackathon", "/hackathon/*"],
+  robotsTxtOptions: {
+    additionalSitemaps: process.env.DEVHUB_BACKEND_URL
+      ? [`${siteUrl}/community-sitemap.xml`]
+      : [],
+  },
   transform: async (config, path) => ({
     loc: path,
     changefreq: config.changefreq,
