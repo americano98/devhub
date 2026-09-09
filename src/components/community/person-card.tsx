@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUpRight, Globe } from "lucide-react";
+import { Globe } from "lucide-react";
 
 import type { PublicPerson } from "@/lib/community/schema";
 import { cn } from "@/lib/utils";
@@ -29,7 +29,12 @@ export function PersonLinks({
             aria-label={`${person.name} on ${kind === "x" ? "X" : kind === "website" ? "their website" : kind === "linkedin" ? "LinkedIn" : "GitHub"}`}
             className="hover:text-db-lava focus-visible:outline-db-lava inline-flex min-h-8 min-w-6 items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
           >
-            {kind === "linkedin" || kind === "x" ? (
+            {kind === "linkedin" ? (
+              <span
+                aria-hidden="true"
+                className="size-5 bg-current mask-[url('/img/community/linkedin.svg')] mask-contain mask-center mask-no-repeat"
+              />
+            ) : kind === "x" ? (
               <img
                 src={`/img/community/${kind}.svg`}
                 alt=""
@@ -77,9 +82,15 @@ export function PersonPhoto({
           className="h-full w-full object-cover object-top grayscale"
         />
       ) : (
-        <div className="bg-grey-80/30 text-grey-40 flex h-full min-h-44 items-center justify-center p-4 text-center text-sm">
-          Photo unavailable
-        </div>
+        <img
+          src="/img/community/default-avatar.svg"
+          alt=""
+          width={256}
+          height={255}
+          loading={eager ? "eager" : "lazy"}
+          decoding="async"
+          className="h-full w-full object-cover"
+        />
       )}
     </div>
   );
@@ -100,15 +111,21 @@ export function PersonCard({ person }: { person: PublicPerson }) {
       <PersonPhoto person={person} />
       {href ? (
         <span className="bg-orange absolute top-0 right-0 grid size-11 place-items-center text-white opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
-          <ArrowUpRight className="size-7" aria-hidden="true" />
+          <img
+            src="/img/templates/arrow-right-up.svg"
+            width={24}
+            height={24}
+            alt=""
+            className="size-6"
+          />
         </span>
       ) : null}
-      <h2 className="mt-3 text-xl/6 font-normal tracking-tight">
+      <h2 className="mt-3 text-xl/tight font-normal tracking-tight">
         {person.name}
       </h2>
       {person.organization || person.headline ? (
         <p
-          className="text-grey-40 mt-1 truncate text-base/5 tracking-tight"
+          className="mt-0.5 truncate text-base/5 tracking-tight text-black/50"
           title={person.organization || person.headline}
         >
           {person.organization || person.headline}
@@ -130,18 +147,18 @@ export function PersonCard({ person }: { person: PublicPerson }) {
       ) : (
         <div>{content}</div>
       )}
-      <div className="mt-3 flex min-h-10 items-center justify-between gap-2 border-t border-black/15 pt-2">
+      <div className="mt-3 flex flex-wrap items-start justify-between gap-x-3 gap-y-3 border-t border-black/15 pt-3">
         {person.country ? (
-          <p className="text-grey-40 flex min-w-0 items-center gap-1.5 text-sm/none tracking-tight uppercase">
+          <p className="flex min-w-0 items-center gap-1.5 text-sm/none tracking-tight text-black/50 uppercase">
             <span className="bg-orange size-1.5 shrink-0" aria-hidden="true" />
-            <span className="truncate" title={person.country}>
+            <span className="wrap-anywhere" title={person.country}>
               [{person.country}]
             </span>
           </p>
         ) : (
           <span />
         )}
-        <PersonLinks person={person} />
+        <PersonLinks person={person} className="-my-1.5" />
       </div>
     </article>
   );

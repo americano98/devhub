@@ -43,7 +43,7 @@ export function CommunityCTA({
           asChild
           variant="orange"
           size="xl"
-          className="shrink-0 font-mono text-sm uppercase sm:text-base"
+          className="w-full shrink-0 font-mono text-sm uppercase sm:w-auto sm:self-start sm:text-base lg:ml-auto lg:self-end"
         >
           <Link href={href}>{action}</Link>
         </Button>

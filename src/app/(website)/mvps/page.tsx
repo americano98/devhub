@@ -18,7 +18,7 @@ export default function MVPPage() {
     <main className="bg-black text-white">
       <ProgramHero kind="mvp" />
       <MVPBenefits />
-      <BrandStrip />
+      <BrandStrip className="h-12" />
       <div className="bg-db-paper text-black">
         <MVPRequirements />
         <CommunityCTA variant="mvp" />

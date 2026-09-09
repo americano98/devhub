@@ -125,9 +125,9 @@ test.describe("community directory integration", () => {
     await expect(directory.getByRole("heading", { level: 2 })).toHaveText(
       result.items.map((person) => person.name),
     );
-    await expect(directory.getByRole("status")).toHaveText(
-      `${result.total} MVPs`,
-    );
+    await expect(
+      directory.getByRole("status", { name: "Directory results" }),
+    ).toHaveText(`${result.total} MVPs`);
   });
 
   test("student highlights render their source descriptions and links", async ({
@@ -222,19 +222,32 @@ test.describe("community directory integration", () => {
       await page.goto(`${route}?page=2`);
       const directory = page.getByRole("region", { name: region, exact: true });
       await directory
-        .getByRole("combobox", { name: "Country", exact: true })
-        .selectOption(person.country);
-      const city = directory.getByRole("combobox", {
+        .getByRole("button", { name: "Country", exact: true })
+        .click();
+      await page
+        .getByRole("checkbox", { name: person.country, exact: true })
+        .click();
+      await expect
+        .poll(() => new URL(page.url()).searchParams.get("country"))
+        .toBe(person.country);
+      const city = directory.getByRole("button", {
         name: "City",
         exact: true,
       });
-      await expect(city.locator("option")).toHaveText([
-        "All cities",
-        ...cities,
-      ]);
       if (cities.length) {
         await expect(city).toBeEnabled();
-        if (person.city) await city.selectOption(person.city);
+        await city.click();
+        await expect(page.getByRole("checkbox")).toHaveCount(cities.length);
+        if (person.city) {
+          await page
+            .getByRole("checkbox", { name: person.city, exact: true })
+            .click();
+          await expect
+            .poll(() => new URL(page.url()).searchParams.get("city"))
+            .toBe(person.city);
+        } else {
+          await page.keyboard.press("Escape");
+        }
       } else {
         await expect(city).toBeDisabled();
       }
@@ -247,14 +260,16 @@ test.describe("community directory integration", () => {
       expect(new URL(page.url()).searchParams.has("page")).toBe(false);
       for (const [key, value] of Object.entries(filters)) {
         expect(new URL(page.url()).searchParams.get(key)).toBe(value);
-        await expect(directory.locator(`select[name="${key}"]`)).toHaveValue(
+        await expect(directory.locator(`input[name="${key}"]`)).toHaveValue(
           value,
         );
       }
       await expect(directory.getByRole("heading", { level: 2 })).toHaveText(
         expected.items.map((item) => item.name),
       );
-      await expect(directory.getByRole("status")).toHaveText(
+      await expect(
+        directory.getByRole("status", { name: "Directory results" }),
+      ).toHaveText(
         `${expected.total} ${kind === "student" ? "student fellows" : "MVPs"}`,
       );
     });

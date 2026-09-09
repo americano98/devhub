@@ -31,7 +31,7 @@ export default async function MVPDirectoryPage({ searchParams }: PageProps) {
   return (
     <main className="bg-black text-white">
       <DirectoryHero kind="mvp" />
-      <BrandStrip />
+      <BrandStrip className="h-12" />
       <div className="bg-db-paper text-black [color-scheme:light]">
         <PeopleDirectory kind="mvp" params={await searchParams} />
         <CommunityCTA variant="mvp" />

@@ -18,7 +18,7 @@ export default function StudentFellowsPage() {
     <main className="bg-black text-white">
       <ProgramHero kind="student" />
       <CampusBenefits />
-      <BrandStrip />
+      <BrandStrip className="h-12" />
       <div className="bg-db-paper text-black">
         <StudentPathways />
         <CommunityCTA variant="student" />

@@ -40,12 +40,12 @@ export function MVPBenefits() {
     <section
       id="program"
       aria-labelledby="mvp-benefits"
-      className="mx-auto max-w-320 scroll-mt-24 px-5 pt-28 pb-24 md:px-8 md:pt-40 md:pb-32 xl:pt-60 xl:pb-40"
+      className="mx-auto max-w-7xl scroll-mt-24 px-5 pt-28 pb-24 md:px-8 md:pt-40 md:pb-32 xl:pt-60 xl:pb-40"
     >
       <SectionKicker className="text-grey-50">Program Benefits</SectionKicker>
       <h2
         id="mvp-benefits"
-        className="mt-6 max-w-240 text-3xl/[1.25] font-normal tracking-[-0.04em] md:text-4xl/[1.25] xl:text-[2.75rem]/[1.25]"
+        className="mt-6 max-w-240 text-3xl/tight font-normal tracking-[-0.04em] md:text-4xl/tight xl:text-[2.75rem]/[1.25]"
       >
         See what MVPs get from the program.
         <br />
@@ -56,11 +56,24 @@ export function MVPBenefits() {
       <div className="mt-12 grid gap-x-8 gap-y-12 sm:grid-cols-2 lg:mt-20 lg:grid-cols-4">
         {mvpBenefits.map(([title, description]) => (
           <article key={title} className="border-grey-20 border-t pt-7">
-            <h3 className="max-w-60 text-2xl/tight font-medium tracking-tight lg:min-h-17.5 xl:text-[1.75rem]/[1.25]">
+            <h3 className="text-2xl/tight font-medium tracking-tight text-pretty lg:min-h-17.5 xl:text-[1.75rem]/[1.25]">
               {title}
             </h3>
-            <p className="text-grey-70 mt-3 max-w-64 text-base/6 tracking-[-0.04em]">
-              {description}
+            <p className="mt-3 text-base/6 tracking-[-0.04em] text-pretty text-white/80 sm:max-w-64">
+              {title === "Share Your Expertise" ? (
+                <>
+                  Get opportunities to share your expertise at events, like{" "}
+                  <a
+                    href="https://www.databricks.com/dataaisummit"
+                    className="text-orange underline-offset-4 hover:underline"
+                  >
+                    Data + AI Summit
+                  </a>
+                  .
+                </>
+              ) : (
+                description
+              )}
             </p>
           </article>
         ))}
@@ -95,20 +108,20 @@ export function CampusBenefits() {
     <section
       id="program"
       aria-labelledby="campus-benefits"
-      className="mx-auto max-w-320 scroll-mt-24 px-5 pt-28 pb-24 md:px-8 md:pt-40 md:pb-32 xl:pt-60 xl:pb-40"
+      className="mx-auto max-w-7xl scroll-mt-24 px-5 pt-28 pb-24 md:px-8 md:pt-40 md:pb-32 xl:pt-60 xl:pb-40"
     >
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between lg:gap-10">
-        <SectionKicker className="text-grey-50 shrink-0">
+      <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between lg:gap-10">
+        <SectionKicker className="text-grey-40 shrink-0">
           On campus
         </SectionKicker>
         <h2
           id="campus-benefits"
-          className="text-3xl/[1.25] font-normal tracking-[-0.04em] md:text-4xl/[1.25] xl:text-[2.75rem]/[1.25]"
+          className="mt-6 text-3xl/tight font-normal tracking-[-0.04em] text-pretty md:text-4xl/tight lg:mt-0 xl:text-[2.75rem]/[1.25]"
         >
           Bring data and AI to your campus.
         </h2>
       </div>
-      <p className="text-grey-70 mt-3 text-3xl/[1.25] tracking-[-0.04em] md:text-4xl/[1.25] lg:mt-0 xl:text-[2.75rem]/[1.25]">
+      <p className="text-grey-70 text-3xl/tight tracking-[-0.04em] text-pretty md:text-4xl/tight lg:mt-0 xl:text-[2.75rem]/[1.25]">
         Fellows share what they learn through events and activities that bring
         students together around data and AI.
       </p>
@@ -133,7 +146,7 @@ export function CampusBenefits() {
               <h3 className="mt-16 text-2xl/tight font-medium tracking-tight xl:mt-29 xl:text-[1.75rem]/[1.25]">
                 {title}
               </h3>
-              <p className="text-grey-70 mt-3 text-lg/[1.5] tracking-tight xl:text-xl/[1.5]">
+              <p className="text-grey-70 mt-3 text-lg/normal tracking-tight text-pretty xl:text-xl/normal">
                 {description}
               </p>
             </div>

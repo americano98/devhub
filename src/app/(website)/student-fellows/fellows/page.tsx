@@ -33,7 +33,7 @@ export default async function StudentsDirectoryPage({
   return (
     <main className="bg-black text-white">
       <DirectoryHero kind="student" />
-      <BrandStrip />
+      <BrandStrip className="h-12" />
       <div className="bg-db-paper text-black [color-scheme:light]">
         <PeopleDirectory kind="student" params={await searchParams} />
         <CommunityCTA variant="student-profile" />

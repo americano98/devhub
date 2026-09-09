@@ -46,7 +46,7 @@ export default async function StudentProfilePage({ params }: PageProps) {
     if (!(error instanceof CommunityApiError)) throw error;
     return (
       <main className="bg-black text-white">
-        <div className="mx-auto max-w-320 px-5 py-16 md:px-8">
+        <div className="mx-auto max-w-7xl px-5 py-16 md:px-8">
           <BackLink href="/student-fellows/fellows">Back to fellows</BackLink>
           <h1 className="my-8 text-4xl">Student Fellow</h1>
           <CommunityUnavailable
@@ -85,8 +85,8 @@ export default async function StudentProfilePage({ params }: PageProps) {
         }}
       />
       <StudentProfile person={person} />
-      <BrandStrip />
-      <div className="bg-db-paper text-black">
+      <BrandStrip className="h-12" />
+      <div className="bg-db-paper flow-root text-black">
         <CommunityCTA variant="student-profile" />
         <Footer className="border-t border-white/10 lg:px-8" />
       </div>

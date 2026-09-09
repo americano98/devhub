@@ -43,51 +43,64 @@ export function MVPRequirements() {
   return (
     <section
       aria-labelledby="membership-requirements"
-      className="mx-auto max-w-320 px-5 pt-24 md:px-8 md:pt-32 xl:pt-40"
+      className="mx-auto max-w-7xl px-5 pt-24 md:px-8 md:pt-32 xl:pt-40"
     >
       <SectionKicker className="text-grey-40">
         Membership Requirements
       </SectionKicker>
       <h2
         id="membership-requirements"
-        className="mt-6 max-w-192 text-3xl/[1.25] font-normal tracking-[-0.04em] md:text-4xl/[1.25] xl:text-[2.75rem]/[1.25]"
+        className="mt-6 max-w-3xl text-3xl/tight font-normal tracking-[-0.04em] text-pretty md:text-4xl/tight xl:text-[2.75rem]/[1.25]"
       >
         How Databricks MVPs contribute to the community.{" "}
         <span className="text-grey-40">
           MVPs share knowledge and grow the ecosystem.
         </span>
       </h2>
-      <div className="mt-14 flex flex-col gap-14 lg:mt-20 lg:gap-18">
+      <div className="mt-14 flex flex-col gap-14 lg:mt-20 lg:gap-16">
         {membership.map(({ label, title, items }, index) => (
           <article
             key={label}
             className="grid gap-6 lg:grid-cols-[256px_1fr] lg:gap-16"
           >
             <div className="pt-4">
-              <SectionKicker index={`0${index + 1}`} className="text-black!">
-                {label}
-              </SectionKicker>
+              <SectionKicker index={`0${index + 1}`}>{label}</SectionKicker>
             </div>
-            <div className="relative grid gap-6 border-t border-black/10 pt-4 lg:min-h-39.75 lg:grid-cols-[320px_1fr] lg:gap-16 lg:border-0">
+            <div className="relative grid gap-6 border-t border-black/10 pt-4 xl:min-h-41.75 xl:grid-cols-[320px_1fr] xl:gap-16 xl:border-0">
               <img
                 src="/img/community/membership-rule.svg"
                 alt=""
                 aria-hidden="true"
                 width={897}
                 height={41}
-                className="pointer-events-none absolute top-0 left-0 hidden h-10 w-full lg:block"
+                className="pointer-events-none absolute top-0 left-0 hidden h-10 w-full xl:block"
               />
-              <h3 className="text-xl/[1.5] font-normal tracking-tight">
+              <h3 className="text-xl/normal font-normal tracking-tight text-pretty">
                 {title}
               </h3>
-              <ul className="text-grey-40 flex flex-col gap-3 text-base/6 tracking-tight lg:pt-13.5">
+              <ul className="flex flex-col gap-3 text-base/6 tracking-tight text-black/80 xl:pt-13.5">
                 {items.map((item) => (
                   <li className="flex items-start gap-2.5" key={item}>
                     <span
                       className="bg-orange mt-2 size-2 shrink-0"
                       aria-hidden="true"
                     />
-                    <span>{item}</span>
+                    <span className="text-pretty">
+                      {item ===
+                      "Engage actively in the official Databricks Community forum" ? (
+                        <>
+                          Engage actively in the official{" "}
+                          <a
+                            href="https://community.databricks.com/"
+                            className="text-orange underline-offset-4 hover:underline"
+                          >
+                            Databricks Community forum
+                          </a>
+                        </>
+                      ) : (
+                        item
+                      )}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -126,12 +139,12 @@ export function StudentPathways() {
   return (
     <section
       aria-labelledby="career-pathways"
-      className="mx-auto max-w-320 px-5 pt-24 md:px-8 md:pt-32 xl:pt-40"
+      className="mx-auto max-w-7xl px-5 pt-24 md:px-8 md:pt-32 xl:pt-40"
     >
       <SectionKicker className="text-grey-40">Career launchpad</SectionKicker>
       <h2
         id="career-pathways"
-        className="mt-6 max-w-200 text-3xl/[1.25] font-normal tracking-[-0.04em] md:text-4xl/[1.25] xl:text-[2.75rem]/[1.25]"
+        className="mt-6 max-w-200 text-3xl/tight font-normal tracking-[-0.04em] text-pretty md:text-4xl/tight xl:text-[2.75rem]/[1.25]"
       >
         Take your skills into the real world.{" "}
         <span className="text-grey-40">
@@ -143,18 +156,16 @@ export function StudentPathways() {
           <article key={label}>
             <div className="grid items-start gap-6 border-b border-black/10 pb-6 lg:grid-cols-[448px_1fr] lg:gap-16">
               <div className="pt-2">
-                <SectionKicker index={`0${index + 1}`} className="text-black!">
-                  {label}
-                </SectionKicker>
+                <SectionKicker index={`0${index + 1}`}>{label}</SectionKicker>
               </div>
-              <h3 className="text-2xl/[1.5] font-normal tracking-[-0.04em] xl:text-[1.75rem]/[1.5]">
+              <h3 className="text-2xl/normal font-normal tracking-tight text-pretty text-black/80 xl:text-[1.75rem]/normal">
                 {title}
               </h3>
             </div>
-            <ul className="text-grey-40 lg:ml-128">
+            <ul className="text-black/80 lg:ml-128">
               {items.map((item) => (
                 <li
-                  className="flex items-start gap-2.5 border-b border-black/10 py-6 text-base/6 tracking-[-0.04em] last:border-0 last:pb-0"
+                  className="flex items-start gap-2.5 border-b border-black/10 py-6 text-base/6 tracking-tight text-pretty last:border-0 last:pb-0"
                   key={item}
                 >
                   <span
