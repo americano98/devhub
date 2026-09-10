@@ -52,7 +52,11 @@ export function ProgramHero({ kind }: { kind: PersonKind }) {
             size="xl"
             className="bg-grey-20 hover:bg-grey-30 font-mono text-sm font-medium tracking-tight text-white uppercase md:text-base"
           >
-            <a href="#program">Explore the Program</a>
+            {mvp ? (
+              <Link href="/mvps/directory">Browse MVP profiles</Link>
+            ) : (
+              <a href="#program">Explore the Program</a>
+            )}
           </Button>
         </div>
         <p className="text-grey-70 max-w-80 text-base/5 text-pretty lg:pt-1">
