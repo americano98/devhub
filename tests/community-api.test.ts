@@ -2,6 +2,7 @@ import { afterEach, describe, expect, it, vi } from "vitest";
 
 import {
   CommunityApiError,
+  getDirectory,
   getPeople,
   getPerson,
 } from "../src/lib/community/people.server";
@@ -32,6 +33,86 @@ afterEach(() => {
 });
 
 describe("backend integration", () => {
+  it("loads every directory page with hourly caching and projects public card data", async () => {
+    vi.stubEnv("DEVHUB_BACKEND_URL", "https://backend.example.com");
+    const fetchMock = vi
+      .fn()
+      .mockResolvedValueOnce(
+        Response.json({
+          items: [profile],
+          total: 2,
+          page: 1,
+          pageSize: 100,
+          totalPages: 2,
+        }),
+      )
+      .mockResolvedValueOnce(
+        Response.json({
+          items: [
+            {
+              ...profile,
+              id: "second",
+              slug: "second",
+              email: "private@example.com",
+            },
+          ],
+          total: 2,
+          page: 2,
+          pageSize: 100,
+          totalPages: 2,
+        }),
+      );
+    vi.stubGlobal("fetch", fetchMock);
+    const people = await getDirectory("student");
+    expect(people.map((person) => person.id)).toEqual([
+      "student-example",
+      "second",
+    ]);
+    expect(people[1]).not.toHaveProperty("email");
+    expect(people[1]).not.toHaveProperty("highlights");
+    expect(String(fetchMock.mock.calls[1][0])).toContain("page=2");
+    for (const [, options] of fetchMock.mock.calls)
+      expect(options).toMatchObject({ next: { revalidate: 3600 } });
+  });
+
+  it("rejects a partial or inconsistent directory instead of publishing it", async () => {
+    vi.stubEnv("DEVHUB_BACKEND_URL", "https://backend.example.com");
+    for (const next of [
+      new Response(null, { status: 503 }),
+      Response.json({
+        items: [profile],
+        total: 2,
+        page: 2,
+        pageSize: 100,
+        totalPages: 2,
+      }),
+      Response.json({
+        items: [],
+        total: 1,
+        page: 2,
+        pageSize: 100,
+        totalPages: 1,
+      }),
+    ]) {
+      vi.stubGlobal(
+        "fetch",
+        vi
+          .fn()
+          .mockResolvedValueOnce(
+            Response.json({
+              items: [profile],
+              total: 2,
+              page: 1,
+              pageSize: 100,
+              totalPages: 2,
+            }),
+          )
+          .mockResolvedValueOnce(next),
+      );
+      await expect(getDirectory("student")).rejects.toThrow(CommunityApiError);
+    }
+  });
+
   it("resolves backend assets, strips private fields, and forwards encoded filters", async () => {
     vi.stubEnv("DEVHUB_BACKEND_URL", "https://backend.example.com");
     const fetchMock = vi.fn().mockResolvedValue(

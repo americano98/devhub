@@ -127,6 +127,7 @@ type Crawl = {
   idsByRoute: Map<string, Set<string>>;
   links: PageLink[];
   pageRoutes: Set<string>;
+  onDemandRoutes: RegExp[];
   publicPaths: Set<string>;
 };
 
@@ -144,6 +145,27 @@ function crawlBuildOutput(): Crawl {
       .filter(([key, route]) => key.endsWith("/page") && !route.includes("["))
       .map(([, route]) => route),
   );
+  // Fully on-demand ISR routes have no build-time HTML. Integration tests
+  // verify their live records; keep strict link checks for prebuilt collections.
+  const prerender = JSON.parse(
+    readFileSync(
+      resolve(NEXT_APP_DIR, "../../prerender-manifest.json"),
+      "utf-8",
+    ),
+  ) as {
+    routes: Record<string, { srcRoute?: string }>;
+    dynamicRoutes: Record<
+      string,
+      { fallback: string | null | false; routeRegex: string }
+    >;
+  };
+  const onDemandRoutes = Object.entries(prerender.dynamicRoutes)
+    .filter(
+      ([path, route]) =>
+        route.fallback !== false &&
+        !Object.values(prerender.routes).some((page) => page.srcRoute === path),
+    )
+    .map(([, route]) => new RegExp(route.routeRegex));
 
   for (const filePath of listPageHtmlFiles()) {
     const route = htmlFileToRoute(filePath);
@@ -175,7 +197,7 @@ function crawlBuildOutput(): Crawl {
     ),
   );
 
-  return { idsByRoute, links, pageRoutes, publicPaths };
+  return { idsByRoute, links, pageRoutes, publicPaths, onDemandRoutes };
 }
 
 const crawl = crawlBuildOutput();
@@ -198,6 +220,7 @@ describe("broken internal links", () => {
       const route = normalizeRoute(pathname);
       if (
         crawl.pageRoutes.has(route) ||
+        crawl.onDemandRoutes.some((pattern) => pattern.test(route)) ||
         crawl.publicPaths.has(route) ||
         isNonPageRoute(route)
       ) {

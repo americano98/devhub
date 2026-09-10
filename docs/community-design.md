@@ -59,7 +59,7 @@ The implementation uses the existing `Inter`, `DM Sans`, and `Geist Mono` font s
 | MVP requirements                   | Custom composition | `program-requirements.tsx`, four rows and exact exported angled SVG rule                                                                            |
 | Student career pathways            | Custom composition | `program-requirements.tsx`, two numbered sections with native lists                                                                                 |
 | Directory headline                 | Custom composition | `directory-hero.tsx`; shared between the two data kinds                                                                                             |
-| Filters / search                   | Adapt              | Existing NativeSelect, Input, Button; native GET form, including a keyboard-operable magnifier submit button                                        |
+| Filters / search                   | Adapt              | Existing Popover, Checkbox, Label, InputGroup and Button; local multiselect and search with URL state and a keyboard-operable magnifier             |
 | People cards                       | Custom composition | `person-card.tsx`, backend photographs, actual names and organization, local social glyphs                                                          |
 | Pagination                         | Adapt              | Existing shadcn Pagination components, real links, current-page state and ellipses                                                                  |
 | Student profile                    | Custom composition | `student-profile.tsx`, existing BackLink and SectionKicker; actual biography/highlights                                                             |
@@ -71,15 +71,15 @@ Small shared changes: `src/components/home/cta.tsx`, `src/components/footer.tsx`
 
 ## Data and interaction contract
 
-- Directories request published records through `getPeople`, `getFacets`, and the parent SDK. They never contain a frontend seed or synthetic participant records.
-- Filters are City and Country in both directories; the native form submits `q`, `city`, and `country`.
-- The list uses 20 records per page, matching the Figma four-column/five-row layout. `page`, search, and filters round-trip in the URL; submitting filters starts on page 1. Pagination preserves the active search/filter values. An out-of-range page redirects to the last available page.
-- Query values are normalized from Next.js `searchParams`; page is a safe integer in 1–100000, `q` is capped at 200 characters, City/Country at 100. Cohort and Expertise remain API capabilities and are not exposed by these Figma-aligned controls.
+- Directories load all published records through `getDirectory` and render with hourly ISR. They never contain a checked-in frontend seed or synthetic participant records.
+- City and Country are local multiselect filters in both directories. Search and pagination also use the public snapshot already loaded in the browser; changing controls makes no data request.
+- The list uses 20 records per page, matching the Figma four-column/five-row layout. Pagination uses `/page/N` (page 1 uses the base directory); search, comma-separated `country` names and repeated `city` values stay in the query string. Native history keeps all controls local. Legacy `?page=N` and repeated `country` parameters remain supported. Filtering resets to the base path; filtered results clamp to the last available page, while nonexistent unfiltered page paths return 404.
+- URL values are normalized locally; page is a safe integer in 1–100000, `q` is capped at 200 characters, each City/Country value at 100. Cohort and Expertise remain API capabilities and are not exposed by these Figma-aligned controls.
 - Student cards navigate to `/student-fellows/fellows/[slug]`. MVP cards link to an actual published external website/social profile; no unrequested MVP detail route is created.
 - The profile rejects missing records and `kind !== "student"` with `notFound()`. Highlights render only when supplied by the backend. Missing biographies, organizations, expertise, locations, and social URLs do not generate invented copy.
-- `CommunityApiError` produces a visible nonfatal error panel with a real reload link. Empty successful searches have their own “No matches found” state and clear-filters link. Unknown student slugs remain 404s, distinct from service outages.
-- The parent SDK uses `cache: "no-store"`; admin updates are visible on subsequent navigation. Server requests use the configured backend origin and do not expose its configuration in client controls.
-- Every page has a specific title, description, and canonical. Directory query URLs use `noindex, follow`; public profile pages add escaped JSON-LD using `ProfilePage`, `Person`, and educational `affiliation` (not an unsupported graduation claim). Sitemap integration is parent-owned.
+- Service errors propagate to a retryable route error boundary; failed ISR regeneration retains the previous successful page. Empty successful searches have their own “No matches found” state and clear-filters link. Unknown student slugs remain 404s, distinct from service outages.
+- Directory and profile fetches use hourly revalidation. See `community-backend.md` for freshness, build-time backend availability and cache invalidation limitations.
+- Every page has a specific title, description, and canonical. Paginated directory paths serve their corresponding cards in ISR HTML, with page-specific titles and canonicals. Directory query URLs share that path's static metadata, canonicalize to the path without query parameters and retain `noindex, follow` through an HTTP header; public profile pages add escaped JSON-LD using `ProfilePage`, `Person`, and educational `affiliation` (not an unsupported graduation claim). Sitemap integration is parent-owned.
 
 Verified CTA destinations:
 
@@ -89,9 +89,9 @@ Verified CTA destinations:
 
 ## Assets, accessibility, and deviations
 
-Local assets under `public/img/community/`: MVP badge SVG; Student badge PNG; `build.svg`, `share.svg`, `learn.svg`; LinkedIn and X SVG glyphs; `membership-rule.svg`. These are actual Figma exports, not approximate redrawn icons. The Student badge is 116 × 138 PNG, matching its displayed size; a higher-resolution/vector replacement can improve high-DPI rendering later.
+Local assets under `public/img/community/`: MVP and Student badge SVGs; `build.svg`, `share.svg`, `learn.svg`; LinkedIn and X SVG glyphs; `membership-rule.svg`; dropdown glyphs and the supplied `default-avatar.svg`. Badges and program illustrations use vector assets rather than raster approximations.
 
-Participant photos always use normalized backend `photoUrl` values. Native images specify dimensions and fixed media geometry, lazy-load directory images, and eagerly load the main profile photo. The source agent reported 110 delivered photos totaling approximately 10 MB, so no frontend image optimizer or permissive remote-host rule is needed for this delivery. Future arbitrary admin uploads should retain server-side image size limits/optimization; the frontend does not enforce upload limits. Missing photos show a neutral “Photo unavailable” slot and never invent a face.
+Participant photos always use normalized backend `photoUrl` values. Native images specify dimensions and fixed media geometry, lazy-load directory images, and eagerly load the main profile photo. Future arbitrary admin uploads should retain server-side image size limits/optimization; the frontend does not enforce upload limits. Missing photo URLs show the supplied neutral `default-avatar.svg`, not placeholder text or an invented face.
 
 Known differences and product decisions:
 
@@ -101,7 +101,7 @@ Known differences and product decisions:
 4. The default CTA was extended through a prop rather than copied. CTA window-label contrast and existing footer small-text contrast were raised after browser accessibility findings.
 5. There is no invented mobile reference and no claim of full visual parity. Prime remains unconfigured and no Prime Studio mutations were made.
 
-Keyboard/focus contracts: labelled native selects and search input; Enter or magnifier submit; normal link navigation and pagination; current-page ARIA; named social links; decorative assets with empty alt; real person-name alt text; existing skip-to-main link. Content sections remain semantic headings, paragraphs, articles, and lists.
+Keyboard/focus contracts: labelled popovers, checkboxes and search inputs; full-row checkbox labels; Gray 80 input borders and Gray 60 focus borders without a blue ring; Enter or magnifier submit; real pagination links with local activation and focus/scroll to results; current-page ARIA; named social links; decorative assets with empty alt; real person-name alt text; existing skip-to-main link. Single-line checkbox rows retain a 40px pitch. Content sections remain semantic headings, paragraphs, articles, and lists.
 
 ## Verification and handoff
 

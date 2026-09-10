@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Globe } from "lucide-react";
 
+import type { DirectoryPerson } from "@/lib/community/directory";
 import type { PublicPerson } from "@/lib/community/schema";
 import { cn } from "@/lib/utils";
 import { MorePersonLinks } from "@/components/community/more-person-links";
@@ -11,7 +12,7 @@ export function PersonLinks({
   className,
   theme = "light",
 }: {
-  person: PublicPerson;
+  person: Pick<PublicPerson, "name" | "links" | "additionalLinks">;
   className?: string;
   theme?: "light" | "dark";
 }) {
@@ -60,7 +61,7 @@ export function PersonPhoto({
   className,
   eager = false,
 }: {
-  person: PublicPerson;
+  person: Pick<PublicPerson, "name" | "photoUrl">;
   className?: string;
   eager?: boolean;
 }) {
@@ -96,7 +97,7 @@ export function PersonPhoto({
   );
 }
 
-export function PersonCard({ person }: { person: PublicPerson }) {
+export function PersonCard({ person }: { person: DirectoryPerson }) {
   const href =
     person.kind === "student"
       ? `/student-fellows/fellows/${person.slug}`
@@ -138,6 +139,7 @@ export function PersonCard({ person }: { person: PublicPerson }) {
       {href ? (
         <Link
           href={href}
+          prefetch={false}
           target={external ? "_blank" : undefined}
           rel={external ? "noopener noreferrer" : undefined}
           className="group focus-visible:outline-db-lava relative block text-black no-underline hover:no-underline focus-visible:outline-2 focus-visible:outline-offset-4"

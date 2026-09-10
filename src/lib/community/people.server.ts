@@ -3,9 +3,9 @@ import "server-only";
 import { cache } from "react";
 import { z } from "zod";
 
+import { directoryPerson } from "./directory";
 import {
   directorySearchParams,
-  peopleFacetsSchema,
   peoplePageSchema,
   publicPersonSchema,
   type DirectoryQuery,
@@ -42,11 +42,13 @@ function backendOrigin(): string {
   return url.origin;
 }
 
-async function request(path: string): Promise<Response> {
+async function request(path: string, revalidate = 0): Promise<Response> {
   try {
     return await fetch(new URL(path, backendOrigin()), {
       headers: { Accept: "application/json" },
-      cache: "no-store",
+      ...(revalidate
+        ? { next: { revalidate } }
+        : { cache: "no-store" as const }),
       signal: AbortSignal.timeout(8000),
     });
   } catch {
@@ -75,9 +77,13 @@ function resolvePhoto(person: PublicPerson): PublicPerson {
   };
 }
 
-export async function getPeople(query: DirectoryQuery): Promise<PeoplePage> {
+export async function getPeople(
+  query: DirectoryQuery,
+  revalidate = 0,
+): Promise<PeoplePage> {
   const response = await request(
     `/api/v1/people?${directorySearchParams(query)}`,
+    revalidate,
   );
   const page = await parseResponse(response, peoplePageSchema);
   return { ...page, items: page.items.map(resolvePhoto) };
@@ -88,6 +94,7 @@ export const getPerson = cache(
     if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
     const response = await request(
       `/api/v1/people/${encodeURIComponent(slug)}`,
+      3600,
     );
     if (response.status === 404) return null;
     const { item } = await parseResponse(
@@ -98,9 +105,27 @@ export const getPerson = cache(
   },
 );
 
-export const getFacets = cache(async (kind: PersonKind) => {
-  const response = await request(
-    `/api/v1/facets?kind=${encodeURIComponent(kind)}`,
-  );
-  return parseResponse(response, peopleFacetsSchema);
+export const getDirectory = cache(async (kind: PersonKind) => {
+  const first = await getPeople({ kind, page: 1, pageSize: 100 }, 3600);
+  // Bound the browser payload; larger directories need server-side search.
+  if (first.page !== 1 || first.total > 5000 || first.totalPages > 50)
+    throw new CommunityApiError();
+  const people = [...first.items];
+  for (let page = 2; page <= first.totalPages; page++) {
+    const next = await getPeople({ kind, page, pageSize: 100 }, 3600);
+    if (
+      next.total !== first.total ||
+      next.page !== page ||
+      next.totalPages !== first.totalPages
+    )
+      throw new CommunityApiError();
+    people.push(...next.items);
+  }
+  if (
+    people.length !== first.total ||
+    new Set(people.map((person) => person.id)).size !== first.total ||
+    people.some((person) => person.kind !== kind)
+  )
+    throw new CommunityApiError();
+  return people.map(directoryPerson);
 });

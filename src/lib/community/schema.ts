@@ -73,15 +73,6 @@ export const peoplePageSchema = z.object({
 
 export type PeoplePage = z.infer<typeof peoplePageSchema>;
 
-export const peopleFacetsSchema = z.object({
-  countries: z.array(z.string()),
-  cities: z.array(z.string()).default([]),
-  cohorts: z.array(z.string()),
-  expertise: z.array(z.string()),
-});
-
-export type PeopleFacets = z.infer<typeof peopleFacetsSchema>;
-
 const directoryQuerySchema = z.object({
   kind: personKindSchema,
   q: z.string().trim().max(200).optional(),

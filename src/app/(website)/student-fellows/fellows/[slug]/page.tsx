@@ -1,30 +1,21 @@
 import { notFound } from "next/navigation";
 
-import { CommunityApiError, getPerson } from "@/lib/community/people.server";
+import { getPerson } from "@/lib/community/people.server";
 import { absoluteSiteUrl, getMetadata } from "@/lib/get-metadata";
-import { BackLink } from "@/components/ui/back-link";
 import { BrandStrip } from "@/components/ui/brand-strip";
 import { CommunityCTA } from "@/components/community/community-cta";
-import { CommunityUnavailable } from "@/components/community/people-directory";
 import { StudentProfile } from "@/components/community/student-profile";
 import Footer from "@/components/footer";
 
 type PageProps = { params: Promise<{ slug: string }> };
 
+export function generateStaticParams() {
+  return [];
+}
+
 export async function generateMetadata({ params }: PageProps) {
   const { slug } = await params;
-  let person;
-  try {
-    person = await getPerson(slug);
-  } catch (error) {
-    if (!(error instanceof CommunityApiError)) throw error;
-    return getMetadata({
-      title: "Student Fellow",
-      description: "Databricks Student Fellows directory",
-      pathname: `/student-fellows/fellows/${slug}`,
-      noIndex: true,
-    });
-  }
+  const person = await getPerson(slug);
   if (!person || person.kind !== "student") notFound();
   return getMetadata({
     title: `${person.name} — Student Fellow`,
@@ -39,24 +30,7 @@ export async function generateMetadata({ params }: PageProps) {
 
 export default async function StudentProfilePage({ params }: PageProps) {
   const { slug } = await params;
-  let person;
-  try {
-    person = await getPerson(slug);
-  } catch (error) {
-    if (!(error instanceof CommunityApiError)) throw error;
-    return (
-      <main className="bg-black text-white">
-        <div className="mx-auto max-w-7xl px-5 py-16 md:px-8">
-          <BackLink href="/student-fellows/fellows">Back to fellows</BackLink>
-          <h1 className="my-8 text-4xl">Student Fellow</h1>
-          <CommunityUnavailable
-            href={`/student-fellows/fellows/${encodeURIComponent(slug)}`}
-          />
-        </div>
-        <Footer />
-      </main>
-    );
-  }
+  const person = await getPerson(slug);
   if (!person || person.kind !== "student") notFound();
   const structuredData = {
     "@context": "https://schema.org",
@@ -93,3 +67,5 @@ export default async function StudentProfilePage({ params }: PageProps) {
     </main>
   );
 }
+
+export const revalidate = 3600;
