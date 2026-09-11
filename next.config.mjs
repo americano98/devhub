@@ -139,7 +139,7 @@ const nextConfig = {
     return [
       ...["/student-fellows/fellows", "/mvps/directory"].flatMap((base) =>
         [base, `${base}/page/:page`].flatMap((source) =>
-          ["q", "city", "country", "page"].map((key) => ({
+          ["q", "city", "country", "university", "page"].map((key) => ({
             source,
             has: [{ type: "query", key }],
             headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],

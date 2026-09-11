@@ -26,7 +26,7 @@ export function DirectoryFilters({
 }: {
   kind: PersonKind;
   params: DirectorySearchParams;
-  facets: { cities: string[]; countries: string[] };
+  facets: { cities: string[]; countries: string[]; universities: string[] };
   onChange: (params: DirectorySearchParams, replace?: boolean) => void;
 }) {
   const query = readDirectoryQuery(params, kind);
@@ -44,24 +44,42 @@ export function DirectoryFilters({
       aria-label={kind === "student" ? "Find student fellows" : "Find MVPs"}
     >
       <fieldset className="min-w-0">
-        <FieldGroup className="flex flex-col gap-5 lg:flex-row lg:items-center lg:gap-7.5">
-          <span className="shrink-0 text-base text-black">Filter by:</span>
-          <div className="flex flex-wrap gap-2.5">
-            {[
-              {
-                name: "city",
-                label: "City",
-                options: facets.cities,
-                value: query.city,
-              },
-              {
-                name: "country",
-                label: "Country",
-                options: facets.countries,
-                value: query.country,
-              },
-            ].map((filter) => (
-              <Field key={filter.name} className="w-40 shrink-0">
+        <FieldGroup className="grid gap-5 md:grid-cols-[auto_minmax(0,1fr)] md:items-center md:gap-x-7.5 lg:grid-cols-[auto_auto_minmax(0,1fr)]">
+          <span className="text-base text-black md:col-span-2 lg:col-span-1">
+            Filter by:
+          </span>
+          <div className="grid grid-cols-2 gap-2.5 sm:w-82.5">
+            {(kind === "student"
+              ? [
+                  {
+                    name: "country" as const,
+                    label: "Country",
+                    options: facets.countries,
+                    value: query.country,
+                  },
+                  {
+                    name: "university" as const,
+                    label: "University",
+                    options: facets.universities,
+                    value: query.university,
+                  },
+                ]
+              : [
+                  {
+                    name: "city" as const,
+                    label: "City",
+                    options: facets.cities,
+                    value: query.city,
+                  },
+                  {
+                    name: "country" as const,
+                    label: "Country",
+                    options: facets.countries,
+                    value: query.country,
+                  },
+                ]
+            ).map((filter) => (
+              <Field key={filter.name} className="min-w-0">
                 <FieldLabel
                   htmlFor={kind + "-" + filter.name}
                   className="sr-only"
@@ -70,7 +88,7 @@ export function DirectoryFilters({
                 </FieldLabel>
                 <DirectoryFilter
                   id={kind + "-" + filter.name}
-                  name={filter.name === "city" ? "city" : "country"}
+                  name={filter.name}
                   label={filter.label}
                   options={filter.options}
                   values={filter.value}
@@ -81,7 +99,7 @@ export function DirectoryFilters({
               </Field>
             ))}
           </div>
-          <Field className="w-full lg:ml-auto lg:max-w-109.25">
+          <Field className="min-w-0 lg:ml-auto lg:max-w-109.25">
             <FieldLabel htmlFor={kind + "-search"} className="sr-only">
               Search by name or expertise
             </FieldLabel>

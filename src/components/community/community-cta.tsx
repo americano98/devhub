@@ -10,8 +10,10 @@ const STUDENT_APPLICATION_URL =
 
 export function CommunityCTA({
   variant,
+  theme = "filled",
 }: {
   variant: "mvp" | "student" | "student-profile";
+  theme?: "filled" | "outline";
 }) {
   const mvp = variant === "mvp";
   const application = variant === "student-profile";
@@ -32,6 +34,7 @@ export function CommunityCTA({
       : "Browse fellow profiles";
   return (
     <CTA
+      theme={theme}
       title={title}
       highlightedText={
         mvp ? "an impact?" : application ? "Student Fellow?" : "the future"

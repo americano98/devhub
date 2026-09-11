@@ -100,9 +100,9 @@ function DirectoryPagination({
       aria-label="Directory pages"
       onClick={navigateLink}
     >
-      <PaginationContent className="flex-wrap justify-center gap-1 sm:gap-3">
+      <PaginationContent className="relative w-full justify-center gap-0 px-8 sm:w-auto sm:gap-3 sm:px-0">
         {page > 1 ? (
-          <PaginationItem>
+          <PaginationItem className="absolute -left-2 sm:static">
             <PaginationPrevious
               href={directoryHref(kind, params, page - 1)}
               className={cn(
@@ -115,10 +115,10 @@ function DirectoryPagination({
         {pages.map((number, index) => (
           <PaginationItem
             key={number}
-            className="flex items-center gap-1 sm:gap-3"
+            className="flex shrink-0 items-center gap-0.5 sm:gap-3"
           >
             {index > 0 && number - pages[index - 1] > 1 ? (
-              <PaginationEllipsis />
+              <PaginationEllipsis className="size-6 sm:size-9" />
             ) : null}
             <PaginationLink
               href={directoryHref(kind, params, number)}
@@ -126,6 +126,7 @@ function DirectoryPagination({
               aria-label={`Page ${number}`}
               className={cn(
                 linkClass,
+                "max-[360px]:size-8",
                 page === number &&
                   "bg-orange hover:bg-orange dark:bg-orange dark:hover:bg-orange border-0 text-white shadow-none hover:text-white",
               )}
@@ -135,12 +136,12 @@ function DirectoryPagination({
           </PaginationItem>
         ))}
         {page < totalPages ? (
-          <PaginationItem>
+          <PaginationItem className="absolute -right-2 sm:static">
             <PaginationNext
               href={directoryHref(kind, params, page + 1)}
               className={cn(
                 linkClass,
-                "text-grey-50 hover:bg-transparent dark:hover:bg-transparent",
+                "text-grey-50 size-8 shrink-0 p-0 hover:bg-transparent sm:h-9 sm:w-auto sm:px-2.5 dark:hover:bg-transparent",
               )}
             />
           </PaginationItem>
@@ -198,6 +199,11 @@ export function DirectoryResults({
       ].sort(),
       cities: [
         ...new Set(members.map((person) => person.city).filter(Boolean)),
+      ].sort(),
+      universities: [
+        ...new Set(
+          members.map((person) => person.organization).filter(Boolean),
+        ),
       ].sort(),
     }),
     [members],

@@ -35,7 +35,7 @@ export function DirectoryFilter({
   onChange,
 }: {
   id: string;
-  name: "city" | "country";
+  name: "city" | "country" | "university";
   label: string;
   options: string[];
   values: string[];
@@ -47,7 +47,12 @@ export function DirectoryFilter({
   const visible = choices.filter((option) =>
     normalizeDirectorySearch(option).includes(normalizeDirectorySearch(search)),
   );
-  const placeholder = name === "country" ? "Search countries" : "Search cities";
+  const placeholder =
+    name === "country"
+      ? "Search countries"
+      : name === "university"
+        ? "Search universities"
+        : "Search cities";
   return (
     <Popover
       open={open}
@@ -66,7 +71,7 @@ export function DirectoryFilter({
           variant="outline"
           aria-label={label}
           disabled={choices.length === 0}
-          className="bg-db-oat-medium hover:bg-db-oat-medium hover:border-grey-60 dark:bg-db-oat-medium dark:hover:bg-db-oat-medium text-grey-40 hover:text-grey-20 border-grey-80 dark:border-grey-80 h-11 w-40 justify-start gap-1.5 rounded-none px-3 text-base font-normal shadow-none disabled:opacity-100"
+          className="bg-db-oat-medium hover:bg-db-oat-medium hover:border-grey-60 dark:bg-db-oat-medium dark:hover:bg-db-oat-medium text-grey-60 hover:text-grey-20 border-grey-80 dark:border-grey-80 h-11 w-full justify-start gap-1.5 rounded-none px-2 text-base font-normal shadow-none disabled:opacity-100 sm:px-3"
         >
           {label}
           {values.length > 0 && (
@@ -123,7 +128,7 @@ export function DirectoryFilter({
               <Label
                 key={option}
                 htmlFor={`${id}-${option}`}
-                className="min-h-10 w-full shrink-0 cursor-pointer gap-2.5 py-2 text-base leading-[1.375] font-normal"
+                className="min-h-10 w-full shrink-0 cursor-pointer gap-2.5 py-2 text-base leading-snug font-normal"
               >
                 <Checkbox
                   id={`${id}-${option}`}

@@ -38,6 +38,7 @@ describe("community public boundary", () => {
       {
         country: [" France ,Japan,, ", "France"],
         city: ["Asao-ku, Kawasaki-shi", "Paris"],
+        university: ["University of California, Berkeley", "Georgia Tech"],
         q: "A&B, C ",
         page: "-1",
       },
@@ -51,13 +52,23 @@ describe("community public boundary", () => {
     });
     const href = directoryHref(
       "student",
-      { country: query.country, city: query.city, q: query.q },
+      {
+        country: query.country,
+        city: query.city,
+        university: query.university,
+        q: query.q,
+      },
       2,
     );
     const params = new URL(href, "https://example.com").searchParams;
     expect(href).toContain("country=France,Japan");
     expect(params.getAll("country")).toEqual(["France,Japan"]);
     expect(params.getAll("city")).toEqual(query.city);
+    expect(params.getAll("university")).toEqual(query.university);
+    expect(
+      readDirectoryQuery({ university: params.getAll("university") }, "student")
+        .university,
+    ).toEqual(["University of California, Berkeley", "Georgia Tech"]);
     expect(params.get("q")).toBe("A&B, C ");
     expect(params.has("page")).toBe(false);
     expect(new URL(href, "https://example.com").pathname).toBe(
@@ -106,8 +117,20 @@ describe("community public boundary", () => {
 
   it("filters locally with OR within facets, AND across facets, and bounded pagination", () => {
     const members = [
-      { name: "First", country: "France", city: "Paris", bio: "Data engineer" },
-      { name: "Second", country: "Japan", city: "Tokyo", expertise: ["Data"] },
+      {
+        name: "First",
+        country: "France",
+        city: "Paris",
+        organization: "First University",
+        bio: "Data engineer",
+      },
+      {
+        name: "Second",
+        country: "Japan",
+        city: "Tokyo",
+        organization: "Second University",
+        expertise: ["Data"],
+      },
       {
         name: "Third",
         country: "Germany",
@@ -131,6 +154,16 @@ describe("community public boundary", () => {
         (person) => person.name,
       ),
     ).toEqual(["Second"]);
+    expect(
+      filterDirectory(members, {
+        ...query,
+        university: ["First University", "Second University"],
+      }).total,
+    ).toBe(2);
+    expect(
+      filterDirectory(members, { ...query, university: ["First University"] })
+        .items,
+    ).toEqual([members[0]]);
     expect(
       filterDirectory(members, { ...query, page: 999, pageSize: 1 }),
     ).toMatchObject({ page: 2, total: 2, totalPages: 2, items: [members[0]] });

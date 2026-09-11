@@ -91,6 +91,7 @@ export function filterDirectory(
     q?: string;
     country: string[];
     city: string[];
+    university?: string[];
     page: number;
     pageSize: number;
   },
@@ -101,7 +102,9 @@ export function filterDirectory(
     .filter(
       (person) =>
         (!query.country.length || query.country.includes(person.country)) &&
-        (!query.city.length || query.city.includes(person.city)),
+        (!query.city.length || query.city.includes(person.city)) &&
+        (!query.university?.length ||
+          query.university.includes(person.organization)),
     )
     .flatMap((person) => {
       const rank = searchScore(person, terms, search);

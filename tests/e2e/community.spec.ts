@@ -74,6 +74,13 @@ test.describe("community directory integration", () => {
     await expect(page.getByRole("heading", { level: 1 })).toContainText(
       person.name,
     );
+    const details = page.getByRole("complementary", { name: "Fellow details" });
+    await expect(
+      details
+        .locator("dl > div")
+        .filter({ hasText: "[Based in]" })
+        .locator("dd"),
+    ).toHaveText(person.country);
     await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
       "href",
       new RegExp(`${person.slug}$`),
@@ -90,7 +97,7 @@ test.describe("community directory integration", () => {
     await page.goto(`/student-fellows/fellows/${person.slug}`);
     await page
       .getByRole("navigation", { name: "Breadcrumb" })
-      .getByRole("link", { name: "Back", exact: true })
+      .getByRole("link", { name: "All fellows", exact: true })
       .click();
     await expect(page).toHaveURL("/student-fellows/fellows");
   });
@@ -236,6 +243,14 @@ test.describe("community directory integration", () => {
         expect(first.headers().location).toContain("country=Brazil");
         const filtered = await request.get(`${route}/page/2?q=data`);
         expect(filtered.headers()["x-robots-tag"]).toBe("noindex, follow");
+        const programPath = kind === "mvp" ? "/mvps" : "/student-fellows";
+        const backToProgram = page.getByRole("link", {
+          name: "Back to program",
+          exact: true,
+        });
+        await expect(backToProgram).toHaveAttribute("href", programPath);
+        await backToProgram.click();
+        await expect(page).toHaveURL(programPath);
       } finally {
         await context.close();
       }
@@ -247,16 +262,27 @@ test.describe("community directory integration", () => {
     }) => {
       const { items } = await readPeople(request, { kind, pageSize: 100 });
       const person =
-        items.find((item) => item.country && item.city) ||
-        items.find((item) => item.country);
+        items.find(
+          (item) =>
+            item.country &&
+            (kind === "student" ? item.organization : item.city),
+        ) || items.find((item) => item.country);
       if (!person) throw new Error("Missing source filter fixture");
       const filters: Record<string, string> = { country: person.country };
-      if (person.city) filters.city = person.city;
-      const expected = await readPeople(request, {
-        kind,
-        pageSize: 20,
-        ...filters,
-      });
+      const facet = kind === "student" ? "university" : "city";
+      const facetValue = kind === "student" ? person.organization : person.city;
+      if (facetValue) filters[facet] = facetValue;
+      const expected =
+        kind === "student"
+          ? filterDirectory(
+              items.map(directoryPerson),
+              readDirectoryQuery(filters, "student"),
+            )
+          : await readPeople(request, {
+              kind,
+              pageSize: 20,
+              ...filters,
+            });
       expect(expected.items.length).toBeGreaterThan(0);
       await page.goto(`${route}/page/2`);
       const directory = page.getByRole("region", { name: region, exact: true });
@@ -267,14 +293,14 @@ test.describe("community directory integration", () => {
         .getByRole("checkbox", { name: person.country, exact: true })
         .click();
       await page.keyboard.press("Escape");
-      const city = directory.getByRole("button", {
-        name: "City",
+      const secondFilter = directory.getByRole("button", {
+        name: kind === "student" ? "University" : "City",
         exact: true,
       });
-      if (person.city) {
-        await city.click();
+      if (facetValue) {
+        await secondFilter.click();
         await page
-          .getByRole("checkbox", { name: person.city, exact: true })
+          .getByRole("checkbox", { name: facetValue, exact: true })
           .click();
         await page.keyboard.press("Escape");
       }
@@ -303,8 +329,8 @@ test.describe("community directory integration", () => {
         )
           dataRequests.push(req.url());
       });
-      if (person.city) {
-        await city.click();
+      if (facetValue) {
+        await secondFilter.click();
         await page
           .getByRole("button", { name: "Clear all", exact: true })
           .click();
@@ -548,12 +574,19 @@ test.describe("community directory integration", () => {
         })
         .getByRole("menu"),
     ).toBeVisible();
-    await expect(menu.getByRole("menuitem")).toHaveText(
-      person.additionalLinks.map((link) => link.label),
-    );
-    for (const [index, link] of person.additionalLinks.entries()) {
-      const item = menu.getByRole("menuitem").nth(index);
-      await expect(item).toHaveAttribute("href", link.url);
+    const card = page.getByRole("article").filter({
+      has: page.getByRole("heading", { name: person.name, exact: true }),
+    });
+    for (const url of new Set(
+      [
+        ...Object.values(person.links),
+        ...person.additionalLinks.map((link) => link.url),
+      ].filter(Boolean),
+    )) {
+      const item = card
+        .locator(`a[href=${JSON.stringify(url)}]:visible`)
+        .last();
+      await expect(item).toBeVisible();
       await expect(item).toHaveAttribute("target", "_blank");
       await expect(item).toHaveAttribute("rel", "noopener noreferrer");
     }

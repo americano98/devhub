@@ -38,7 +38,9 @@ export function readDirectoryQuery(
           .flatMap((item) =>
             key === "country" ? item?.split(",") || [] : [item],
           )
-          .map((item) => item?.trim().slice(0, 100))
+          .map((item) =>
+            item?.trim().slice(0, key === "university" ? 300 : 100),
+          )
           .filter((item): item is string => Boolean(item)),
       ),
     ];
@@ -52,6 +54,7 @@ export function readDirectoryQuery(
     q: value("q", 200),
     city: values("city"),
     country: values("country"),
+    university: kind === "student" ? values("university") : [],
     page:
       Number.isSafeInteger(requestedPage) &&
       requestedPage > 0 &&
@@ -71,6 +74,8 @@ export function directoryHref(
   const search = new URLSearchParams();
   if (query.q) search.set("q", query.q);
   for (const city of query.city) search.append("city", city);
+  for (const university of query.university)
+    search.append("university", university);
   const parts = [search.toString()];
   if (query.country.length)
     parts.push(`country=${query.country.map(encodeURIComponent).join(",")}`);

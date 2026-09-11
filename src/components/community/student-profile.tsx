@@ -2,35 +2,86 @@ import { ArrowUpRight } from "lucide-react";
 
 import type { PublicPerson } from "@/lib/community/schema";
 import { BackLink } from "@/components/ui/back-link";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
 import { PersonLinks, PersonPhoto } from "@/components/community/person-card";
 import { SectionKicker } from "@/components/products/section-kicker";
 
 export function StudentProfile({ person }: { person: PublicPerson }) {
   return (
-    <article className="mx-auto max-w-7xl px-5 pt-12 pb-24 md:px-8 lg:pb-40">
-      <nav
-        aria-label="Breadcrumb"
-        className="text-grey-60 mb-14 flex flex-wrap items-center gap-2.5"
-      >
-        <BackLink href="/student-fellows/fellows">Back</BackLink>
-        <span aria-hidden="true">/</span>
-        <span className="font-mono text-xs text-white uppercase">
-          Individual fellow page
-        </span>
-      </nav>
-      <div className="grid items-start gap-14 lg:grid-cols-[minmax(0,736px)_minmax(0,352px)] lg:gap-24">
-        <div className="min-w-0">
-          <h1 className="border-grey-20 border-b pb-12 text-3xl/tight font-normal tracking-[-0.04em] md:text-4xl/tight xl:text-[2.75rem]/[1.25]">
-            <span>{person.name}.</span>
-            {person.headline ? (
-              <>
-                <br />
-                <span className="text-white/60">[{person.headline}]</span>
-              </>
+    <article className="mx-auto max-w-7xl px-5 pt-12 pb-10 md:px-8 xl:pb-40">
+      <Breadcrumb aria-label="Breadcrumb" className="mb-14">
+        <BreadcrumbList className="text-grey-60 gap-2.5">
+          <BreadcrumbItem>
+            <BackLink href="/student-fellows/fellows">All fellows</BackLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator>/</BreadcrumbSeparator>
+          <BreadcrumbItem className="min-w-0">
+            <BreadcrumbPage className="font-mono text-xs text-white uppercase">
+              {person.name}
+            </BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+      <div className="grid items-start gap-y-12 lg:grid-cols-[minmax(0,736px)_minmax(0,352px)] lg:grid-rows-[auto_1fr] lg:gap-x-24">
+        <h1 className="border-grey-20 border-b pb-12 text-3xl/tight font-normal tracking-[-0.04em] md:text-4xl/tight xl:text-[2.75rem]/[1.25]">
+          <span>{person.name}.</span>
+          {person.headline ? (
+            <>
+              <br />
+              <span className="text-white/60">[{person.headline}]</span>
+            </>
+          ) : null}
+        </h1>
+        <aside
+          aria-label="Fellow details"
+          className="grid min-w-0 gap-10 md:grid-cols-2 md:gap-8 lg:col-start-2 lg:row-span-2 lg:row-start-1 lg:block lg:pt-3"
+        >
+          <PersonPhoto
+            person={person}
+            eager
+            className="bg-grey-12 aspect-[352/390] max-w-88"
+          />
+          <div className="min-w-0">
+            <dl className="divide-grey-20 divide-y lg:mt-12">
+              {[
+                ["Based in", person.country],
+                ["Studying at", person.organization],
+                ["Cohort", person.cohort],
+              ]
+                .filter(([, value]) => value)
+                .map(([label, value]) => (
+                  <div key={label} className="py-5 first:pt-0 md:py-7">
+                    <dt>
+                      <SectionKicker font="sans" className="text-white/30">
+                        {label}
+                      </SectionKicker>
+                    </dt>
+                    <dd className="mt-4.5 text-xl tracking-tight md:text-2xl/snug">
+                      {value}
+                    </dd>
+                  </div>
+                ))}
+            </dl>
+            {Object.values(person.links).some(Boolean) ||
+            person.additionalLinks.length ? (
+              <div className="border-grey-20 border-t pt-7">
+                <SectionKicker font="sans" className="text-white/30">
+                  Connect
+                </SectionKicker>
+                <PersonLinks person={person} className="mt-6 gap-5" />
+              </div>
             ) : null}
-          </h1>
+          </div>
+        </aside>
+        <div className="min-w-0 lg:col-start-1 lg:row-start-2">
           {person.bio ? (
-            <section aria-labelledby="fellow-about" className="mt-12">
+            <section aria-labelledby="fellow-about">
               <h2 id="fellow-about" className="text-2xl/normal font-medium">
                 About
               </h2>
@@ -110,49 +161,6 @@ export function StudentProfile({ person }: { person: PublicPerson }) {
             </section>
           ) : null}
         </div>
-        <aside aria-label="Fellow details" className="min-w-0 lg:pt-3">
-          <PersonPhoto
-            person={person}
-            eager
-            className="bg-grey-12 aspect-[352/390] max-w-88"
-          />
-          <dl className="divide-grey-20 mt-12 divide-y">
-            {[
-              [
-                "Based in",
-                [person.city, person.country].filter(Boolean).join(", "),
-              ],
-              ["Studying at", person.organization],
-              ["Cohort", person.cohort],
-            ]
-              .filter(([, value]) => value)
-              .map(([label, value]) => (
-                <div key={label} className="py-7 first:pt-0">
-                  <dt>
-                    <SectionKicker font="sans" className="text-white/30">
-                      {label}
-                    </SectionKicker>
-                  </dt>
-                  <dd className="mt-4.5 text-2xl/[1.375] tracking-tight">
-                    {value}
-                  </dd>
-                </div>
-              ))}
-          </dl>
-          {Object.values(person.links).some(Boolean) ||
-          person.additionalLinks.length ? (
-            <div className="border-grey-20 border-t pt-7">
-              <SectionKicker font="sans" className="text-white/30">
-                Connect
-              </SectionKicker>
-              <PersonLinks
-                person={person}
-                theme="dark"
-                className="mt-6 gap-5"
-              />
-            </div>
-          ) : null}
-        </aside>
       </div>
     </article>
   );

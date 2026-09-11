@@ -59,9 +59,9 @@ export default async function StudentProfilePage({ params }: PageProps) {
         }}
       />
       <StudentProfile person={person} />
-      <BrandStrip className="h-12" />
-      <div className="bg-db-paper flow-root text-black">
-        <CommunityCTA variant="student-profile" />
+      <BrandStrip className="hidden h-12 xl:block" />
+      <div className="xl:bg-db-paper flow-root bg-black">
+        <CommunityCTA variant="student-profile" theme="outline" />
         <Footer className="border-t border-white/10 lg:px-8" />
       </div>
     </main>

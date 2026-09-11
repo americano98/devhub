@@ -2,6 +2,7 @@ import Link from "next/link";
 import { Globe } from "lucide-react";
 
 import type { DirectoryPerson } from "@/lib/community/directory";
+import { personLinks } from "@/lib/community/person-links";
 import type { PublicPerson } from "@/lib/community/schema";
 import { cn } from "@/lib/utils";
 import { MorePersonLinks } from "@/components/community/more-person-links";
@@ -10,25 +11,46 @@ import { Icons } from "@/components/icons";
 export function PersonLinks({
   person,
   className,
-  theme = "light",
+  compact = false,
 }: {
   person: Pick<PublicPerson, "name" | "links" | "additionalLinks">;
   className?: string;
-  theme?: "light" | "dark";
+  compact?: boolean;
 }) {
+  const links = personLinks(person);
+  const iconCount = links.filter((link) => link.kind !== "other").length;
+  const visibleCount = compact
+    ? Math.min(iconCount, links.length > 3 || links.length > iconCount ? 2 : 3)
+    : iconCount;
+  const compactCount = compact
+    ? Math.min(iconCount, links.length > 2 || links.length > iconCount ? 1 : 2)
+    : iconCount;
   return (
-    <div className={cn("flex shrink-0 items-center gap-3", className)}>
-      {Object.entries(person.links).map(([kind, href]) => {
-        if (!href) return null;
-        const Icon = kind === "github" ? Icons.github : Globe;
+    <div
+      className={cn(
+        "flex shrink-0 items-center gap-3",
+        !compact && "flex-wrap",
+        className,
+      )}
+    >
+      {links.slice(0, visibleCount).map(({ kind, url, label }, index) => {
+        const Icon =
+          kind === "github"
+            ? Icons.github
+            : kind === "youtube"
+              ? Icons.youtube
+              : Globe;
         return (
           <a
-            key={kind}
-            href={href}
+            key={url}
+            href={url}
             target="_blank"
             rel="noopener noreferrer"
-            aria-label={`${person.name} on ${kind === "x" ? "X" : kind === "website" ? "their website" : kind === "linkedin" ? "LinkedIn" : "GitHub"}`}
-            className="hover:text-db-lava focus-visible:outline-db-lava inline-flex min-h-8 min-w-6 items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-4"
+            aria-label={`${person.name} on ${kind === "website" ? "their website" : kind === "youtube" ? "YouTube" : label}`}
+            className={cn(
+              "hover:text-db-lava focus-visible:outline-db-lava inline-flex min-h-8 min-w-6 items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-offset-4",
+              index >= compactCount && "hidden xl:inline-flex",
+            )}
           >
             {kind === "linkedin" ? (
               <span
@@ -36,12 +58,9 @@ export function PersonLinks({
                 className="size-5 bg-current mask-[url('/img/community/linkedin.svg')] mask-contain mask-center mask-no-repeat"
               />
             ) : kind === "x" ? (
-              <img
-                src={`/img/community/${kind}.svg`}
-                alt=""
-                width={20}
-                height={20}
-                className={cn("size-5", theme === "light" && "brightness-0")}
+              <span
+                aria-hidden="true"
+                className="size-5 bg-current mask-[url('/img/community/x.svg')] mask-contain mask-center mask-no-repeat"
               />
             ) : (
               <Icon className="size-5" aria-hidden="true" />
@@ -49,8 +68,12 @@ export function PersonLinks({
           </a>
         );
       })}
-      {person.additionalLinks.length > 0 && (
-        <MorePersonLinks name={person.name} links={person.additionalLinks} />
+      {links.length > compactCount && (
+        <MorePersonLinks
+          name={person.name}
+          links={links.slice(compactCount)}
+          wideVisibleCount={visibleCount - compactCount}
+        />
       )}
     </div>
   );
@@ -149,18 +172,18 @@ export function PersonCard({ person }: { person: DirectoryPerson }) {
       ) : (
         <div>{content}</div>
       )}
-      <div className="mt-3 flex flex-wrap items-start justify-between gap-x-3 gap-y-3 border-t border-black/15 pt-3">
+      <div className="mt-3 flex items-center justify-between gap-3 border-t border-black/15 pt-3">
         {person.country ? (
           <p className="flex min-w-0 items-center gap-1.5 text-sm/none tracking-tight text-black/50 uppercase">
             <span className="bg-orange size-1.5 shrink-0" aria-hidden="true" />
-            <span className="wrap-anywhere" title={person.country}>
+            <span className="truncate" title={person.country}>
               [{person.country}]
             </span>
           </p>
         ) : (
           <span />
         )}
-        <PersonLinks person={person} className="-my-1.5" />
+        <PersonLinks person={person} compact className="-my-1.5" />
       </div>
     </article>
   );
