@@ -145,7 +145,7 @@ checks passed; existing duplication remains outside the community components.
 
 Updated the hero actions from [Figma node 12547:14374](https://www.figma.com/design/auWfvBwnxY9q6acMsE4xdd/Databricks-Website-Design?node-id=12547-14374), after synchronizing `feat/community-programs` with the rebased remote branch at `de0db45`.
 
-The student hero now groups the profile directory and Fellow sign-in controls with “Not a fellow yet? Apply today”. The application uses the same source URL as the directory CTA and the exact exported 16px SVG arrow. Buttons are 44px tall, with desktop widths of 245px and 183px, 20px between buttons and 28px before the application prompt. Existing project fonts and grey tokens are retained. The supporting description moves below the actions before the desktop row becomes crowded.
+The student hero now groups the profile directory and Fellow sign-in controls with “Not a fellow yet? Apply today”. The application uses the same source URL as the directory CTA and the exact exported 16px SVG arrow. Buttons are 44px tall, with desktop widths of 245px and 183px, 20px gaps between buttons and before the application prompt (12px in the stacked mobile layout). The prompt wraps as a single group only when the available width is insufficient; no viewport breakpoint forces it onto a separate row. Existing project fonts and grey tokens are retained. The supporting description moves below the actions before the desktop row becomes crowded.
 
 Member authentication in DevHub remains future scope. The sign-in control links to the existing Student Fellows site at `https://databricksstudentfellows.com/signin`, as confirmed by the user.
 

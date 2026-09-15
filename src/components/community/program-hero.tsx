@@ -47,11 +47,16 @@ export function ProgramHero({ kind }: { kind: PersonKind }) {
       >
         <div
           className={cn(
-            "flex flex-col gap-4",
-            !mvp && "lg:flex-row lg:items-center lg:gap-7",
+            "flex",
+            mvp ? "flex-col gap-4" : "flex-wrap items-center gap-3 sm:gap-5",
           )}
         >
-          <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-5">
+          <div
+            className={cn(
+              "flex flex-col gap-3 sm:flex-row sm:flex-wrap sm:gap-5",
+              !mvp && "w-full sm:w-auto",
+            )}
+          >
             <Button
               asChild
               size="xl"
@@ -87,7 +92,7 @@ export function ProgramHero({ kind }: { kind: PersonKind }) {
             )}
           </div>
           {!mvp && (
-            <p className="text-grey-80 flex flex-wrap items-center gap-x-1.5 text-base/5">
+            <p className="text-grey-80 flex shrink-0 flex-wrap items-center gap-x-1.5 text-base/5">
               <span>Not a fellow yet?</span>
               <a
                 href={STUDENT_APPLICATION_URL}
