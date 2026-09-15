@@ -85,7 +85,7 @@ Verified CTA destinations:
 
 - [MVP nomination](https://surveys.training.databricks.com/jfe/form/SV_6Ed034QOD4pcQFU), linked from the existing [Databricks MVP page](https://www.databricks.com/discover/mvps).
 - [Student Fellows application](https://airtable.com/appasC90KmqZ5x1t5/pag6tvR9VUG4Kf1iM/form), supplied by the source/data agent's verified program-link extraction.
-- “Explore the Program” scrolls to `#program`; “Browse fellow profiles” navigates to the internal directory.
+- “Browse fellow profiles” navigates to the internal directory; “Apply today” opens the existing Student Fellows application form. “Fellow sign in” opens the existing [Student Fellows sign-in](https://databricksstudentfellows.com/signin).
 
 ## Assets, accessibility, and deviations
 
@@ -140,3 +140,17 @@ Before publication on 2026-09-08, the changes were transferred to
 production build, 355 unit tests across 39 files and 199 browser tests passed,
 including all 12 community scenarios. Formatting, typecheck and dead-code
 checks passed; existing duplication remains outside the community components.
+
+## Student Fellows hero update — 2026-09-15
+
+Updated the hero actions from [Figma node 12547:14374](https://www.figma.com/design/auWfvBwnxY9q6acMsE4xdd/Databricks-Website-Design?node-id=12547-14374), after synchronizing `feat/community-programs` with the rebased remote branch at `de0db45`.
+
+The student hero now groups the profile directory and Fellow sign-in controls with “Not a fellow yet? Apply today”. The application uses the same source URL as the directory CTA and the exact exported 16px SVG arrow. Buttons are 44px tall, with desktop widths of 245px and 183px, 20px between buttons and 28px before the application prompt. Existing project fonts and grey tokens are retained. The supporting description moves below the actions before the desktop row becomes crowded.
+
+Member authentication in DevHub remains future scope. The sign-in control links to the existing Student Fellows site at `https://databricksstudentfellows.com/signin`, as confirmed by the user.
+
+Browser checks covered 320, 390, 768, 1024, 1280 and 1920px without horizontal overflow. The directory CTA opened the live student directory, and Apply today opened the Databricks Student Fellows Interest Form. The MVP hero retains its existing nomination/directory actions. The page retains one H1, its title/description/canonical, semantic links and a decorative arrow with empty alternative text.
+
+Prime setup requires an organization login and was unavailable. This update uses direct Figma context and local component patterns; no machine Prime parity or pixel-perfect claim is made. No dependencies or backend configuration were changed by the hero update.
+
+Validation: production build, 408 unit tests, 204 browser tests, formatting, typecheck and dead-code checks passed. Existing duplication remains outside the community components.
