@@ -4,16 +4,15 @@ import {
   CommunityApiError,
   getDirectory,
   getPeople,
-  getPerson,
 } from "../src/lib/community/people.server";
 
 vi.mock("server-only", () => ({}));
 
 const profile = {
-  id: "student-example",
-  slug: "student-example",
-  kind: "student",
-  name: "Example Fellow",
+  id: "mvp-example",
+  slug: "mvp-example",
+  kind: "mvp",
+  name: "Example MVP",
   headline: "",
   bio: "",
   country: "",
@@ -63,9 +62,9 @@ describe("backend integration", () => {
         }),
       );
     vi.stubGlobal("fetch", fetchMock);
-    const people = await getDirectory("student");
+    const people = await getDirectory("mvp");
     expect(people.map((person) => person.id)).toEqual([
-      "student-example",
+      "mvp-example",
       "second",
     ]);
     expect(people[1]).not.toHaveProperty("email");
@@ -109,7 +108,7 @@ describe("backend integration", () => {
           )
           .mockResolvedValueOnce(next),
       );
-      await expect(getDirectory("student")).rejects.toThrow(CommunityApiError);
+      await expect(getDirectory("mvp")).rejects.toThrow(CommunityApiError);
     }
   });
 
@@ -125,29 +124,13 @@ describe("backend integration", () => {
       }),
     );
     vi.stubGlobal("fetch", fetchMock);
-    const page = await getPeople({ kind: "student", q: "A&B" });
+    const page = await getPeople({ kind: "mvp", q: "A&B" });
     expect(page.items[0].photoUrl).toBe(
       "https://backend.example.com/headshots/example.jpg",
     );
     expect(page.items[0]).not.toHaveProperty("email");
     expect(String(fetchMock.mock.calls[0][0])).toContain("q=A%26B");
     expect(fetchMock.mock.calls[0][1]).toMatchObject({ cache: "no-store" });
-  });
-
-  it("distinguishes missing profiles from service failures", async () => {
-    vi.stubEnv("DEVHUB_BACKEND_URL", "https://backend.example.com");
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue(new Response(null, { status: 404 })),
-    );
-    expect(await getPerson("missing-person")).toBeNull();
-    vi.stubGlobal(
-      "fetch",
-      vi.fn().mockResolvedValue(new Response(null, { status: 503 })),
-    );
-    await expect(getPerson("another-person")).rejects.toThrow(
-      CommunityApiError,
-    );
   });
 
   it("rejects malformed responses instead of silently showing an empty directory", async () => {
@@ -157,12 +140,5 @@ describe("backend integration", () => {
       vi.fn().mockResolvedValue(Response.json({ items: [profile] })),
     );
     await expect(getPeople({ kind: "mvp" })).rejects.toThrow(CommunityApiError);
-  });
-
-  it("does not request arbitrary paths via a profile slug", async () => {
-    const fetchMock = vi.fn();
-    vi.stubGlobal("fetch", fetchMock);
-    expect(await getPerson("../../api/admin/people")).toBeNull();
-    expect(fetchMock).not.toHaveBeenCalled();
   });
 });

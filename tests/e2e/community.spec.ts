@@ -1,10 +1,5 @@
 import { expect, test, type APIRequestContext } from "@playwright/test";
 
-import {
-  directoryPerson,
-  filterDirectory,
-} from "../../src/lib/community/directory";
-import { readDirectoryQuery } from "../../src/lib/community/directory-query";
 import type { PeoplePage } from "../../src/lib/community/schema";
 
 const backendUrl = process.env.DEVHUB_BACKEND_URL;
@@ -18,25 +13,36 @@ async function readPeople(
   return response.json();
 }
 
-for (const { path, title } of [
-  { path: "/mvps", title: /Databricks MVPs/i },
-  { path: "/student-fellows", title: /Student fellows/i },
-]) {
-  test(`${path} renders its program content on mobile`, async ({ page }) => {
-    await page.setViewportSize({ width: 390, height: 844 });
+test("/mvps renders its program content on mobile", async ({ page }) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  const response = await page.goto("/mvps");
+  expect(response?.status()).toBe(200);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    /Databricks MVPs/i,
+  );
+  await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
+    "href",
+    /\/mvps$/,
+  );
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth > window.innerWidth,
+  );
+  expect(overflow).toBe(false);
+});
+
+test("Student Fellows pages remain unpublished", async ({ page }) => {
+  for (const path of [
+    "/student-fellows",
+    "/student-fellows/fellows",
+    "/student-fellows/fellows/example-fellow",
+  ]) {
     const response = await page.goto(path);
-    expect(response?.status()).toBe(200);
-    await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      new RegExp(`${path}$`),
-    );
-    const overflow = await page.evaluate(
-      () => document.documentElement.scrollWidth > window.innerWidth,
-    );
-    expect(overflow).toBe(false);
-  });
-}
+    expect(response?.status(), path).toBe(404);
+    await expect(
+      page.getByRole("heading", { name: /page not found/i }),
+    ).toBeVisible();
+  }
+});
 
 test.describe("community directory integration", () => {
   test.skip(
@@ -44,79 +50,19 @@ test.describe("community directory integration", () => {
     "Set DEVHUB_BACKEND_URL and run the backend to test real directory integration.",
   );
 
-  test("student search, profile and browser back preserve backend records", async ({
-    page,
-    request,
-  }) => {
-    const { items } = await readPeople(request, {
-      kind: "student",
-      pageSize: 100,
-    });
-    const person = items.find((item) => item.bio.includes("\n\n"));
-    expect(
-      person,
-      "The source fixture includes a multi-paragraph biography",
-    ).toBeDefined();
-    if (!person) throw new Error("Missing source biography fixture");
-    await page.goto("/student-fellows/fellows");
-    const search = page.getByRole("searchbox", {
-      name: "Search by name or expertise",
-    });
-    await search.fill(person.name);
-    await search.press("Enter");
-    await expect
-      .poll(() => new URL(page.url()).searchParams.get("q"))
-      .toBe(person.name);
-    const searchUrl = page.url();
-    await page
-      .locator(`a[href="/student-fellows/fellows/${person.slug}"]`)
-      .click();
-    await expect(page.getByRole("heading", { level: 1 })).toContainText(
-      person.name,
-    );
-    const details = page.getByRole("complementary", { name: "Fellow details" });
-    await expect(
-      details
-        .locator("dl > div")
-        .filter({ hasText: "[Based in]" })
-        .locator("dd"),
-    ).toHaveText(person.country);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      new RegExp(`${person.slug}$`),
-    );
-    await expect(
-      page.getByRole("region", { name: "About", exact: true }).locator("p"),
-    ).toHaveText(person.bio.split(/\n\s*\n/).filter(Boolean));
-    await page.goBack();
-    await expect(page).toHaveURL(searchUrl);
-    await expect(search).toHaveValue(person.name);
-    await expect(
-      page.getByRole("heading", { name: person.name, exact: true }),
-    ).toBeVisible();
-    await page.goto(`/student-fellows/fellows/${person.slug}`);
-    await page
-      .getByRole("navigation", { name: "Breadcrumb" })
-      .getByRole("link", { name: "All fellows", exact: true })
-      .click();
-    await expect(page).toHaveURL("/student-fellows/fellows");
-  });
-
   test("an empty search has a clear result state", async ({ page }) => {
-    await page.goto(
-      "/student-fellows/fellows?q=does-not-match-any-person-01a07c3d",
-    );
+    await page.goto("/mvps/directory?q=does-not-match-any-person-01a07c3d");
     await expect(
       page.getByRole("heading", { name: "No matches found" }),
     ).toBeVisible();
     await page
       .getByRole("link", { name: "Clear filters", exact: true })
       .click();
-    await expect(page).toHaveURL("/student-fellows/fellows");
+    await expect(page).toHaveURL("/mvps/directory");
     await expect(page.getByRole("searchbox")).toHaveValue("");
     await expect(
       page
-        .getByRole("region", { name: "Student fellows directory" })
+        .getByRole("region", { name: "MVP directory" })
         .getByRole("heading", { level: 2 })
         .first(),
     ).toBeVisible();
@@ -142,68 +88,9 @@ test.describe("community directory integration", () => {
     ).toHaveText(`${result.total} MVPs`);
   });
 
-  test("student highlights render their source descriptions and links", async ({
-    page,
-    request,
-  }) => {
-    const { items } = await readPeople(request, {
-      kind: "student",
-      pageSize: 100,
-    });
-    const person = items.find(
-      (item) =>
-        item.highlights.length > 1 &&
-        item.highlights.some((highlight) => highlight.url),
-    );
-    expect(
-      person,
-      "The source fixture includes linked student highlights",
-    ).toBeDefined();
-    if (!person) throw new Error("Missing source highlights fixture");
-    await page.goto(`/student-fellows/fellows/${person.slug}`);
-    const highlights = page.getByRole("region", {
-      name: "Highlights",
-      exact: true,
-    });
-    await expect(highlights.getByRole("heading", { level: 3 })).toHaveText(
-      person.highlights.map((highlight) => highlight.title),
-    );
-    for (const [index, highlight] of person.highlights.entries()) {
-      const article = highlights.getByRole("article").nth(index);
-      await expect(article.locator("p")).toHaveText(highlight.description);
-      if (highlight.url) {
-        const link = article.getByRole("link", {
-          name: highlight.title,
-          exact: true,
-        });
-        await expect(link).toHaveAttribute("href", highlight.url);
-        await expect(link).toHaveAttribute("target", "_blank");
-        await expect(link).toHaveAttribute("rel", /noopener/);
-      } else {
-        await expect(article.getByRole("link")).toHaveCount(0);
-      }
-    }
-    if (person.photoUrl) {
-      const photo = page
-        .getByRole("complementary", { name: "Fellow details" })
-        .getByRole("img", { name: person.name, exact: true });
-      await expect(photo).toBeVisible();
-      await expect
-        .poll(() =>
-          photo.evaluate((image: HTMLImageElement) => image.naturalWidth),
-        )
-        .toBeGreaterThan(0);
-    }
-  });
-
   for (const { kind, route, region } of [
-    {
-      kind: "student",
-      route: "/student-fellows/fellows",
-      region: "Student fellows directory",
-    },
     { kind: "mvp", route: "/mvps/directory", region: "MVP directory" },
-  ]) {
+  ] as const) {
     test(`${kind} page URLs render the requested records without JavaScript`, async ({
       browser,
       request,
@@ -243,46 +130,31 @@ test.describe("community directory integration", () => {
         expect(first.headers().location).toContain("country=Brazil");
         const filtered = await request.get(`${route}/page/2?q=data`);
         expect(filtered.headers()["x-robots-tag"]).toBe("noindex, follow");
-        const programPath = kind === "mvp" ? "/mvps" : "/student-fellows";
         const backToProgram = page.getByRole("link", {
           name: "Back to program",
           exact: true,
         });
-        await expect(backToProgram).toHaveAttribute("href", programPath);
+        await expect(backToProgram).toHaveAttribute("href", "/mvps");
         await backToProgram.click();
-        await expect(page).toHaveURL(programPath);
+        await expect(page).toHaveURL("/mvps");
       } finally {
         await context.close();
       }
     });
 
-    test(`${kind} filters reset pagination${kind === "student" ? " and support local multiselect" : ""}`, async ({
-      page,
-      request,
-    }) => {
+    test(`${kind} filters reset pagination`, async ({ page, request }) => {
       const { items } = await readPeople(request, { kind, pageSize: 100 });
       const person =
-        items.find(
-          (item) =>
-            item.country &&
-            (kind === "student" ? item.organization : item.city),
-        ) || items.find((item) => item.country);
+        items.find((item) => item.country && item.city) ||
+        items.find((item) => item.country);
       if (!person) throw new Error("Missing source filter fixture");
       const filters: Record<string, string> = { country: person.country };
-      const facet = kind === "student" ? "university" : "city";
-      const facetValue = kind === "student" ? person.organization : person.city;
-      if (facetValue) filters[facet] = facetValue;
-      const expected =
-        kind === "student"
-          ? filterDirectory(
-              items.map(directoryPerson),
-              readDirectoryQuery(filters, "student"),
-            )
-          : await readPeople(request, {
-              kind,
-              pageSize: 20,
-              ...filters,
-            });
+      if (person.city) filters.city = person.city;
+      const expected = await readPeople(request, {
+        kind,
+        pageSize: 20,
+        ...filters,
+      });
       expect(expected.items.length).toBeGreaterThan(0);
       await page.goto(`${route}/page/2`);
       const directory = page.getByRole("region", { name: region, exact: true });
@@ -294,13 +166,13 @@ test.describe("community directory integration", () => {
         .click();
       await page.keyboard.press("Escape");
       const secondFilter = directory.getByRole("button", {
-        name: kind === "student" ? "University" : "City",
+        name: "City",
         exact: true,
       });
-      if (facetValue) {
+      if (person.city) {
         await secondFilter.click();
         await page
-          .getByRole("checkbox", { name: facetValue, exact: true })
+          .getByRole("checkbox", { name: person.city, exact: true })
           .click();
         await page.keyboard.press("Escape");
       }
@@ -312,228 +184,14 @@ test.describe("community directory integration", () => {
       );
       await expect(
         directory.getByRole("status", { name: "Directory results" }),
-      ).toHaveText(
-        `${expected.total} ${kind === "student" ? "student fellows" : "MVPs"}`,
-      );
-      if (kind === "mvp") return;
-
-      const another = items.find(
-        (item) => item.country && item.country !== person.country,
-      );
-      if (!another) throw new Error("Source fixture needs two countries");
-      const dataRequests: string[] = [];
-      page.on("request", (req) => {
-        if (
-          ["document", "fetch", "xhr"].includes(req.resourceType()) &&
-          !req.headers()["next-router-prefetch"]
-        )
-          dataRequests.push(req.url());
-      });
-      if (facetValue) {
-        await secondFilter.click();
-        await page
-          .getByRole("button", { name: "Clear all", exact: true })
-          .click();
-        await page.keyboard.press("Escape");
-      }
-      await directory
-        .getByRole("button", { name: "Country", exact: true })
-        .click();
-      await page
-        .getByRole("checkbox", { name: another.country, exact: true })
-        .click();
-      await expect(
-        page.getByRole("checkbox", { name: person.country, exact: true }),
-      ).toBeChecked();
-      await expect(
-        page.getByRole("checkbox", { name: another.country, exact: true }),
-      ).toBeChecked();
-      await expect(
-        directory.getByLabel("2 selected", { exact: true }),
-      ).toBeVisible();
-      expect(new URL(page.url()).searchParams.getAll("country")).toEqual([
-        `${person.country},${another.country}`,
-      ]);
-      await page.keyboard.press("Escape");
-      const combinedUrl = page.url();
-      const selectedCountries = await directory
-        .locator("article > div p")
-        .allTextContents();
-      expect(selectedCountries.length).toBeGreaterThan(0);
-      expect(
-        selectedCountries.every((text) =>
-          [person.country, another.country].some((country) =>
-            text.includes(`[${country}]`),
-          ),
-        ),
-      ).toBe(true);
-      await page.goBack();
-      await expect(
-        directory.getByLabel("1 selected", { exact: true }),
-      ).toBeVisible();
-      await page.goForward();
-      await expect(page).toHaveURL(combinedUrl);
-      await expect(
-        directory.getByLabel("2 selected", { exact: true }),
-      ).toBeVisible();
-      const search = directory.getByRole("searchbox");
-      await search.pressSequentially("no matches 01a07c3d");
-      await expect(search).toHaveValue("no matches 01a07c3d");
-      await expect(
-        directory.getByRole("heading", { name: "No matches found" }),
-      ).toBeVisible();
-      await directory
-        .getByRole("button", { name: "Clear search", exact: true })
-        .click();
-      await expect(search).toHaveValue("");
-      await expect(
-        directory.getByRole("heading", { name: "No matches found" }),
-      ).toHaveCount(0);
-      expect(dataRequests).toEqual([]);
-      await page.reload();
-      await expect(
-        directory.getByLabel("2 selected", { exact: true }),
-      ).toBeVisible();
-      await directory
-        .getByRole("button", { name: "Country", exact: true })
-        .click();
-      await page
-        .getByRole("button", { name: "Clear all", exact: true })
-        .click();
-      await expect(page).toHaveURL(route);
-      await expect(
-        directory.getByLabel("2 selected", { exact: true }),
-      ).toHaveCount(0);
+      ).toHaveText(`${expected.total} MVPs`);
     });
   }
 
-  test("student pagination retains search and renders the correct next and previous records", async ({
-    page,
-    request,
-  }) => {
-    const source = await readPeople(request, {
-      kind: "student",
-      pageSize: 100,
-    });
-    const members = [...source.items];
-    for (let pageNumber = 2; pageNumber <= source.totalPages; pageNumber++) {
-      const next = await readPeople(request, {
-        kind: "student",
-        pageSize: 100,
-        page: pageNumber,
-      });
-      members.push(...next.items);
-    }
-    const query = readDirectoryQuery({ q: "data" }, "student");
-    const directoryMembers = members.map(directoryPerson);
-    const first = filterDirectory(directoryMembers, query);
-    const second = filterDirectory(directoryMembers, { ...query, page: 2 });
-    expect(
-      first.totalPages,
-      "The source fixture has two pages matching data",
-    ).toBeGreaterThan(1);
-    expect(second.items.length).toBeGreaterThan(0);
-    await page.goto("/student-fellows/fellows?q=data");
-    const directory = page.getByRole("region", {
-      name: "Student fellows directory",
-    });
-    const pagination = directory.getByRole("navigation", {
-      name: "Directory pages",
-    });
-    await expect(directory.getByRole("heading", { level: 2 })).toHaveText(
-      first.items.map((person) => person.name),
-    );
-    const dataRequests: string[] = [];
-    page.on("request", (req) => {
-      // Footer links may prefetch when pagination scrolls them into view.
-      if (
-        ["document", "fetch", "xhr"].includes(req.resourceType()) &&
-        !req.headers()["next-router-prefetch"]
-      )
-        dataRequests.push(req.url());
-    });
-    await pagination.getByRole("link", { name: "Go to next page" }).click();
-    await expect(page).toHaveURL("/student-fellows/fellows/page/2?q=data");
-    await expect(page).toHaveTitle(/Student Fellows — Page 2/);
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      /\/student-fellows\/fellows\/page\/2$/,
-    );
-    await expect(directory).toBeFocused();
-    await expect(directory.getByRole("article").first()).toBeInViewport();
-    await expect(page.getByRole("searchbox")).toHaveValue("data");
-    await expect(
-      pagination.getByRole("link", { name: "Page 2", exact: true }),
-    ).toHaveAttribute("aria-current", "page");
-    await expect(directory.getByRole("heading", { level: 2 })).toHaveText(
-      second.items.map((person) => person.name),
-    );
-    await pagination.getByRole("link", { name: "Go to previous page" }).click();
-    await expect(page).toHaveURL("/student-fellows/fellows?q=data");
-    await expect(page).toHaveTitle(
-      "Meet the Student Fellows | Databricks Developer",
-    );
-    await expect(page.locator('link[rel="canonical"]')).toHaveAttribute(
-      "href",
-      /\/student-fellows\/fellows$/,
-    );
-    await expect(directory.getByRole("heading", { level: 2 })).toHaveText(
-      first.items.map((person) => person.name),
-    );
-    expect(dataRequests).toEqual([]);
-    await page.goBack();
-    await expect(page).toHaveURL("/student-fellows/fellows/page/2?q=data");
-    await expect(page).toHaveTitle(/Student Fellows — Page 2/);
-    await expect(directory.getByRole("heading", { level: 2 })).toHaveText(
-      second.items.map((person) => person.name),
-    );
-    await page.reload();
-    await expect(directory.getByRole("heading", { level: 2 })).toHaveText(
-      second.items.map((person) => person.name),
-    );
-  });
-
-  test("community sitemap serves valid XML with student profile URLs", async ({
-    page,
-    request,
-  }) => {
-    const response = await request.get("/community-sitemap.xml");
-    expect(response.status()).toBe(200);
-    expect(response.headers()["content-type"]).toMatch(/^application\/xml\b/);
-    const sitemap = await page.evaluate(
-      (xml) => {
-        const document = new DOMParser().parseFromString(
-          xml,
-          "application/xml",
-        );
-        return {
-          error: document.querySelector("parsererror")?.textContent ?? null,
-          urls: Array.from(
-            document.getElementsByTagNameNS(
-              "http://www.sitemaps.org/schemas/sitemap/0.9",
-              "loc",
-            ),
-            (location) => location.textContent ?? "",
-          ),
-        };
-      },
-      await response.text(),
-    );
-    expect(sitemap.error).toBeNull();
-    expect(sitemap.urls.length).toBeGreaterThan(0);
-    for (const url of sitemap.urls) {
-      expect(url).toMatch(
-        /^https?:\/\/[^/]+\/student-fellows\/fellows\/[a-z0-9-]+$/,
-      );
-    }
-  });
-
-  test("unknown community profiles and pages render one website not-found shell", async ({
+  test("unknown MVP pages render one website not-found shell", async ({
     page,
   }) => {
     for (const path of [
-      "/student-fellows/fellows/unknown-person-01a07c3d",
-      "/student-fellows/fellows/page/0",
       "/mvps/directory/page/0",
       "/mvps/directory/page/100000",
     ]) {

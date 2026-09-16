@@ -547,14 +547,16 @@ test.describe("footer navigation", () => {
     { href: "/solutions", label: "Solutions" },
     { href: "/mvps", label: "MVPs" },
     { href: "/mvps/directory", label: "MVP directory" },
-    { href: "/student-fellows", label: "Student Fellows" },
-    { href: "/student-fellows/fellows", label: "Student directory" },
     { href: "/product/databricks-apps", label: "Databricks Apps" },
     { href: "/product/lakebase", label: "Lakebase" },
     { href: "/product/agent-bricks", label: "Agent Bricks" },
   ];
 
   const FOOTER_EXTERNAL_LINKS = [
+    {
+      href: "https://databricksstudentfellows.com/",
+      label: "Student Fellows",
+    },
     { href: "https://www.reddit.com/r/databricks/", label: "Reddit" },
     { href: "https://www.youtube.com/@Databricks", label: "YouTube" },
     { href: "https://github.com/databricks/devhub", label: "GitHub" },
@@ -593,8 +595,7 @@ test.describe("footer navigation", () => {
     "/solutions",
     "/mvps",
     "/mvps/directory",
-    "/student-fellows",
-    "/student-fellows/fellows",
+    "https://databricksstudentfellows.com/",
     "https://www.reddit.com/r/databricks/",
     "https://www.youtube.com/@Databricks",
     "https://github.com/databricks/devhub",

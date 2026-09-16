@@ -7,7 +7,6 @@ import { directoryPerson } from "./directory";
 import {
   directorySearchParams,
   peoplePageSchema,
-  publicPersonSchema,
   type DirectoryQuery,
   type PeoplePage,
   type PersonKind,
@@ -88,22 +87,6 @@ export async function getPeople(
   const page = await parseResponse(response, peoplePageSchema);
   return { ...page, items: page.items.map(resolvePhoto) };
 }
-
-export const getPerson = cache(
-  async (slug: string): Promise<PublicPerson | null> => {
-    if (!/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(slug)) return null;
-    const response = await request(
-      `/api/v1/people/${encodeURIComponent(slug)}`,
-      3600,
-    );
-    if (response.status === 404) return null;
-    const { item } = await parseResponse(
-      response,
-      z.object({ item: publicPersonSchema }),
-    );
-    return resolvePhoto(item);
-  },
-);
 
 export const getDirectory = cache(async (kind: PersonKind) => {
   const first = await getPeople({ kind, page: 1, pageSize: 100 }, 3600);

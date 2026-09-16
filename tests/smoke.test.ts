@@ -65,12 +65,6 @@ function findFilesContaining(root: string, pattern: string): string[] {
 }
 
 function readSitemapLocs(filePath = "sitemap.xml"): string[] {
-  if (filePath === "community-sitemap.xml") {
-    // This sitemap reads published profiles at request time. Its contents and
-    // outage behavior are covered in community-sitemap.test.ts and E2E.
-    expect(existsSync(resolve(NEXT_APP_DIR, filePath, "route.js"))).toBe(true);
-    return [];
-  }
   const text = readPublicFile(filePath);
   const locs = Array.from(text.matchAll(/<loc>([^<]+)<\/loc>/g), (m) => m[1]);
 

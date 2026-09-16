@@ -78,11 +78,11 @@ const nextConfig = {
     const latestAppkitDocs = `/docs/appkit/${appkitDocsChannel()}`;
 
     return [
-      ...["/student-fellows/fellows", "/mvps/directory"].map((destination) => ({
-        source: `${destination}/page/1`,
-        destination,
+      {
+        source: "/mvps/directory/page/1",
+        destination: "/mvps/directory",
         permanent: true,
-      })),
+      },
       {
         source: "/docs",
         destination: "/docs/start-here",
@@ -137,14 +137,12 @@ const nextConfig = {
   },
   async headers() {
     return [
-      ...["/student-fellows/fellows", "/mvps/directory"].flatMap((base) =>
-        [base, `${base}/page/:page`].flatMap((source) =>
-          ["q", "city", "country", "university", "page"].map((key) => ({
-            source,
-            has: [{ type: "query", key }],
-            headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
-          })),
-        ),
+      ...["/mvps/directory", "/mvps/directory/page/:page"].flatMap((source) =>
+        ["q", "city", "country", "page"].map((key) => ({
+          source,
+          has: [{ type: "query", key }],
+          headers: [{ key: "X-Robots-Tag", value: "noindex, follow" }],
+        })),
       ),
       {
         source: "/js/home-hero-player.js",

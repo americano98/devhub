@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
 import { MorePersonLinks } from "@/components/community/more-person-links";
 import { Icons } from "@/components/icons";
 
-export function PersonLinks({
+function PersonLinks({
   person,
   className,
   compact = false,
@@ -79,7 +79,7 @@ export function PersonLinks({
   );
 }
 
-export function PersonPhoto({
+function PersonPhoto({
   person,
   className,
   eager = false,

@@ -1,5 +1,9 @@
 # Community backend integration
 
+> Student Fellows routes and their dynamic sitemap are deferred to the
+> `feat/student-fellows` branch. The shared data contract remains here because
+> it is also used by the MVP directory and will be reused when those routes ship.
+
 Backend repository: [pixel-point/devhub-backend](https://github.com/pixel-point/devhub-backend).
 Follow its [Vercel setup guide](https://github.com/pixel-point/devhub-backend/blob/main/docs/vercel.md)
 to deploy the API/admin and initialize Neon. In the Vercel project connected to

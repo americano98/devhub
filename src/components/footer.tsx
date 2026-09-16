@@ -45,8 +45,11 @@ const FOOTER_SECTIONS: FooterSection[] = [
     items: [
       { label: "MVPs", to: "/mvps" },
       { label: "MVP directory", to: "/mvps/directory" },
-      { label: "Student Fellows", to: "/student-fellows" },
-      { label: "Fellow directory", to: "/student-fellows/fellows" },
+      {
+        label: "Student Fellows",
+        href: "https://databricksstudentfellows.com/",
+        externalArrow: true,
+      },
       {
         label: "Reddit",
         href: "https://www.reddit.com/r/databricks/",

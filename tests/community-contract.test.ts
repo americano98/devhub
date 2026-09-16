@@ -15,10 +15,10 @@ import {
 } from "../src/lib/community/schema";
 
 const profile = {
-  id: "student-example",
-  slug: "student-example",
-  kind: "student",
-  name: "Example Fellow",
+  id: "mvp-example",
+  slug: "mvp-example",
+  kind: "mvp",
+  name: "Example MVP",
   headline: "",
   bio: "",
   country: "",
@@ -38,11 +38,10 @@ describe("community public boundary", () => {
       {
         country: [" France ,Japan,, ", "France"],
         city: ["Asao-ku, Kawasaki-shi", "Paris"],
-        university: ["University of California, Berkeley", "Georgia Tech"],
         q: "A&B, C ",
         page: "-1",
       },
-      "student",
+      "mvp",
     );
     expect(query).toMatchObject({
       country: ["France", "Japan"],
@@ -51,11 +50,10 @@ describe("community public boundary", () => {
       page: 1,
     });
     const href = directoryHref(
-      "student",
+      "mvp",
       {
         country: query.country,
         city: query.city,
-        university: query.university,
         q: query.q,
       },
       2,
@@ -64,24 +62,17 @@ describe("community public boundary", () => {
     expect(href).toContain("country=France,Japan");
     expect(params.getAll("country")).toEqual(["France,Japan"]);
     expect(params.getAll("city")).toEqual(query.city);
-    expect(params.getAll("university")).toEqual(query.university);
-    expect(
-      readDirectoryQuery({ university: params.getAll("university") }, "student")
-        .university,
-    ).toEqual(["University of California, Berkeley", "Georgia Tech"]);
     expect(params.get("q")).toBe("A&B, C ");
     expect(params.has("page")).toBe(false);
     expect(new URL(href, "https://example.com").pathname).toBe(
-      "/student-fellows/fellows/page/2",
+      "/mvps/directory/page/2",
     );
     expect(
-      readDirectoryQuery(
-        { country: params.get("country") || undefined },
-        "student",
-      ).country,
+      readDirectoryQuery({ country: params.get("country") || undefined }, "mvp")
+        .country,
     ).toEqual(query.country);
     expect(
-      readDirectoryQuery({ country: ["France", "Japan"] }, "student").country,
+      readDirectoryQuery({ country: ["France", "Japan"] }, "mvp").country,
     ).toEqual(query.country);
     expect(
       directoryHref("mvp", { country: ["Belgium", "Brazil", "Canada"] }),
@@ -144,7 +135,7 @@ describe("community public boundary", () => {
     );
     const query = readDirectoryQuery(
       { country: ["France", "Japan"], q: " DATA " },
-      "student",
+      "mvp",
     );
     expect(
       filterDirectory(members, query).items.map((person) => person.name),
@@ -154,16 +145,6 @@ describe("community public boundary", () => {
         (person) => person.name,
       ),
     ).toEqual(["Second"]);
-    expect(
-      filterDirectory(members, {
-        ...query,
-        university: ["First University", "Second University"],
-      }).total,
-    ).toBe(2);
-    expect(
-      filterDirectory(members, { ...query, university: ["First University"] })
-        .items,
-    ).toEqual([members[0]]);
     expect(
       filterDirectory(members, { ...query, page: 999, pageSize: 1 }),
     ).toMatchObject({ page: 2, total: 2, totalPages: 2, items: [members[0]] });
@@ -199,13 +180,13 @@ describe("community public boundary", () => {
       "SQL",
     ]) {
       expect(
-        filterDirectory([person], readDirectoryQuery({ q }, "student")).items,
+        filterDirectory([person], readDirectoryQuery({ q }, "mvp")).items,
         q,
       ).toEqual([person]);
     }
     for (const q of ["jose python", "C#", "ML", "QL", "park"]) {
       expect(
-        filterDirectory([person], readDirectoryQuery({ q }, "student")).items,
+        filterDirectory([person], readDirectoryQuery({ q }, "mvp")).items,
         q,
       ).toEqual([]);
     }
@@ -221,13 +202,13 @@ describe("community public boundary", () => {
     );
     for (const q of ["Micheal", "Michaal", "Michaell", "Mchael"]) {
       expect(
-        filterDirectory([person], readDirectoryQuery({ q }, "student")).items,
+        filterDirectory([person], readDirectoryQuery({ q }, "mvp")).items,
         q,
       ).toEqual([person]);
     }
     for (const q of ["Michell", "Mikhaelx", "SGL"]) {
       expect(
-        filterDirectory([person], readDirectoryQuery({ q }, "student")).items,
+        filterDirectory([person], readDirectoryQuery({ q }, "mvp")).items,
         q,
       ).toEqual([]);
     }
@@ -246,7 +227,7 @@ describe("community public boundary", () => {
         publicPersonSchema.parse({ ...profile, ...fields, id: String(index) }),
       ),
     );
-    const query = readDirectoryQuery({ q: "Michael" }, "student");
+    const query = readDirectoryQuery({ q: "Michael" }, "mvp");
     expect(
       filterDirectory(members, query).items.map(({ name }) => name),
     ).toEqual([
@@ -321,7 +302,7 @@ describe("community public boundary", () => {
 
   it("encodes filters as values and constrains pagination", () => {
     const query = directorySearchParams({
-      kind: "student",
+      kind: "mvp",
       q: "A&B",
       country: "United States",
     });

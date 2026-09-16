@@ -1,5 +1,9 @@
 # MVP and Student Fellows design implementation
 
+> Student Fellows implementation details below are retained for the deferred
+> `feat/student-fellows` branch. The current release publishes only the MVP
+> pages and links to the existing external Student Fellows site.
+
 Implemented 2026-09-07 using the existing DevHub Next.js, Tailwind, and shadcn components. Figma is the visual source. Prime setup was unavailable, and the parent authorized native implementation; no Prime candidate validation, export, or visual parity claim is made.
 
 ## Routes and Figma sources
