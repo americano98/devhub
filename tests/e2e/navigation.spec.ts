@@ -70,6 +70,21 @@ test.describe("navbar navigation", () => {
     });
   }
 
+  test("navbar Student Fellows opens the external program site", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 1440, height: 900 });
+    await page.goto("/");
+    await page.getByRole("button", { name: "[Resources]" }).hover();
+
+    const link = page.locator(
+      'header nav a[href="https://databricksstudentfellows.com/"]',
+    );
+    await expect(link).toHaveText(/Student Fellows/);
+    await expect(link).toHaveAttribute("target", "_blank");
+    await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  });
+
   for (const dropdown of [
     {
       label: "Product",
@@ -225,9 +240,15 @@ test.describe("mobile navigation", () => {
       await expect(
         menu.getByRole("link", { name: "mvps", exact: true }),
       ).toHaveAttribute("href", "/mvps");
-      await expect(
-        menu.getByRole("link", { name: "student fellows", exact: true }),
-      ).toHaveAttribute("href", "/student-fellows");
+      const studentFellows = menu.locator(
+        'a[href="https://databricksstudentfellows.com/"]',
+      );
+      await expect(studentFellows).toHaveText(/student fellows/);
+      await expect(studentFellows).toHaveAttribute("target", "_blank");
+      await expect(studentFellows).toHaveAttribute(
+        "rel",
+        "noopener noreferrer",
+      );
 
       await expect(
         page.getByRole("button", { name: "Close menu" }),

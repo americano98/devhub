@@ -22,7 +22,10 @@ export const HEADER_LINKS: readonly HeaderNavItem[] = [
     links: [
       { label: "Solutions", href: "/solutions" },
       { label: "MVPs", href: "/mvps" },
-      { label: "Student Fellows", href: "/student-fellows" },
+      {
+        label: "Student Fellows",
+        href: "https://databricksstudentfellows.com/",
+      },
     ],
   },
   { label: "Templates", href: "/templates" },

@@ -13,7 +13,7 @@ export function DirectoryHero({ kind }: { kind: PersonKind }) {
             ? "[The people behind the impact.]"
             : "[Meet the next generation of AI.]"}
         </h1>
-        <p className="text-grey-80 mt-6 max-w-80 text-base/tight text-pretty md:mt-0 lg:absolute lg:right-8 lg:-bottom-2 lg:max-w-64 xl:bottom-2">
+        <p className="text-grey-80 mt-6 max-w-80 text-base/tight text-pretty md:mt-0 lg:absolute lg:right-8 lg:bottom-2 lg:max-w-95 xl:max-w-64">
           {mvp
             ? "Meet experts who share knowledge, build community, and grow the Databricks ecosystem."
             : "Meet the students building, learning, and shaping the future of data and AI."}
