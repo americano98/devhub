@@ -1,17 +1,10 @@
-import { expect, test, type APIRequestContext } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 
-import type { PeoplePage } from "../../src/lib/community/schema";
+import { filterDirectory } from "../../src/lib/community/directory";
+import { readDirectoryQuery } from "../../src/lib/community/directory-query";
+import { getMvpDirectory } from "../../src/lib/community/mvps";
 
-const backendUrl = process.env.DEVHUB_BACKEND_URL;
-
-async function readPeople(
-  request: APIRequestContext,
-  params: Record<string, string | number>,
-): Promise<PeoplePage> {
-  const response = await request.get(`${backendUrl}/api/v1/people`, { params });
-  expect(response.ok(), `People API returned ${response.status()}`).toBe(true);
-  return response.json();
-}
+const mvpMembers = getMvpDirectory();
 
 test("/mvps renders its program content on mobile", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
@@ -45,11 +38,6 @@ test("Student Fellows pages remain unpublished", async ({ page }) => {
 });
 
 test.describe("community directory integration", () => {
-  test.skip(
-    !backendUrl,
-    "Set DEVHUB_BACKEND_URL and run the backend to test real directory integration.",
-  );
-
   test("an empty search has a clear result state", async ({ page }) => {
     await page.goto("/mvps/directory?q=does-not-match-any-person-01a07c3d");
     await expect(
@@ -68,11 +56,10 @@ test.describe("community directory integration", () => {
     ).toBeVisible();
   });
 
-  test("MVP directory renders actual published MVPs", async ({
+  test("MVP directory renders the verified static records", async ({
     page,
-    request,
   }) => {
-    const result = await readPeople(request, { kind: "mvp", pageSize: 20 });
+    const result = filterDirectory(mvpMembers, readDirectoryQuery({}, "mvp"));
     expect(result.items.length).toBeGreaterThan(0);
     await page.goto("/mvps/directory");
     await expect(page.getByRole("heading", { level: 1 })).toHaveCount(1);
@@ -96,7 +83,10 @@ test.describe("community directory integration", () => {
       request,
       baseURL,
     }) => {
-      const source = await readPeople(request, { kind, pageSize: 20, page: 2 });
+      const source = filterDirectory(mvpMembers, {
+        ...readDirectoryQuery({}, kind),
+        page: 2,
+      });
       const context = await browser.newContext({
         javaScriptEnabled: false,
         baseURL,
@@ -142,19 +132,18 @@ test.describe("community directory integration", () => {
       }
     });
 
-    test(`${kind} filters reset pagination`, async ({ page, request }) => {
-      const { items } = await readPeople(request, { kind, pageSize: 100 });
+    test(`${kind} filters reset pagination`, async ({ page }) => {
+      const items = mvpMembers;
       const person =
         items.find((item) => item.country && item.city) ||
         items.find((item) => item.country);
       if (!person) throw new Error("Missing source filter fixture");
       const filters: Record<string, string> = { country: person.country };
       if (person.city) filters.city = person.city;
-      const expected = await readPeople(request, {
-        kind,
-        pageSize: 20,
-        ...filters,
-      });
+      const expected = filterDirectory(
+        mvpMembers,
+        readDirectoryQuery(filters, kind),
+      );
       expect(expected.items.length).toBeGreaterThan(0);
       await page.goto(`${route}/page/2`);
       const directory = page.getByRole("region", { name: region, exact: true });
@@ -207,13 +196,12 @@ test.describe("community directory integration", () => {
 
   test("MVP cards expose every additional source link with keyboard access", async ({
     page,
-    request,
   }) => {
-    const { items } = await readPeople(request, { kind: "mvp", pageSize: 100 });
+    const items = mvpMembers;
     const person = items.find((item) => item.additionalLinks.length >= 2);
     expect(
       person,
-      "The workbook includes profiles with multiple additional links",
+      "The official snapshot includes profiles with multiple additional links",
     ).toBeDefined();
     if (!person) throw new Error("Missing additional links source fixture");
     await page.goto(`/mvps/directory?q=${encodeURIComponent(person.name)}`);
@@ -258,7 +246,7 @@ test.describe("community directory integration", () => {
     );
     expect(
       additionalOnly,
-      "The workbook includes an MVP whose only destination is YouTube",
+      "The official snapshot includes an MVP whose only destination is YouTube",
     ).toBeDefined();
     if (!additionalOnly)
       throw new Error("Missing additional-only source fixture");

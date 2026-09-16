@@ -1,8 +1,9 @@
 # Community backend integration
 
 > Student Fellows routes and their dynamic sitemap are deferred to the
-> `feat/student-fellows` branch. The shared data contract remains here because
-> it is also used by the MVP directory and will be reused when those routes ship.
+> `feat/student-fellows` branch. The backend client and shared data contract are
+> intentionally retained for that later release, but the current MVP directory
+> does not call the backend.
 
 Backend repository: [pixel-point/devhub-backend](https://github.com/pixel-point/devhub-backend).
 Follow its [Vercel setup guide](https://github.com/pixel-point/devhub-backend/blob/main/docs/vercel.md)
@@ -12,9 +13,19 @@ origin for **Preview**, then redeploy this PR. Configure **Production** separate
 The API and `/headshots` must be publicly reachable; no browser CORS wildcard
 or auth/database/email secrets are needed in the frontend.
 
-The MVP and Student Fellows pages read published profiles from the separate
-`devhub-backend` service. The website contains no editable profile database or
-checked-in data snapshot. Next.js caches published data and rendered pages.
+The MVP directory reads the checked-in snapshot at
+`src/lib/community/data/mvps.json`. Its roster, public profile fields, images,
+and links were reconciled against the official
+[Databricks MVP page](https://www.databricks.com/discover/mvps), which is the
+source of truth. The existing `devhub-backend` client remains available for
+Student Fellows and future administrative workflows, but it is not used to
+render MVPs.
+
+MVP portraits are checked in under `public/img/community/mvps`. Each image is a
+768×768 JPEG generated from the supplied source portrait with face-aware square
+cropping and conservative compression. This keeps the 352px desktop card sharp
+on high-density screens without a runtime dependency on the Databricks image
+host.
 
 Start the backend with `pnpm dev:local` on port 3001 and this website with
 `pnpm dev` on port 3000. The backend's explicitly enabled local mode uses the
@@ -52,26 +63,25 @@ accepted into the rendered contract.
 
 ## Rendering and freshness
 
-Both directories use ISR with `revalidate = 3600`. The build loads all published
-members of each program in API batches of 100, validates the complete result,
-and prerenders the first 20 cards. `/mvps/directory/page/2` and
-`/student-fellows/fellows/page/2` (and later pages) generate on demand with the same
-hourly ISR, serving the requested 20-card slice in HTML before JavaScript runs.
-Malformed or out-of-range page paths return 404; `/page/1` permanently redirects
-to the base directory while retaining query parameters.
-The backend must therefore be reachable and
-`DEVHUB_BACKEND_URL` configured **during the production build**, not only at runtime.
-The browser receives only public card fields and normalized, weighted search terms;
-highlights and other detail-only fields are not sent with the directory.
-Snapshots over 5,000 members per program are rejected; revisit browser payload
-size and server-side search before approaching that scale.
+The MVP snapshot contains 87 official members and was verified on 2026-09-16.
+All 87 matched records in the admin export. Twenty-two admin-only records were
+excluded because they were absent from the official page, and the official
+“Director I Author” title was used for Dr. Alan L. Dennis instead of the
+conflicting backend title. Country casing and admin-only city metadata remain
+normalized for the existing filters.
 
-GitHub Actions reads the backend origin from the repository variable
-`DEVHUB_BACKEND_URL` for its build and integration tests. Configure it before
-running CI; no backend URL or fallback is committed in the workflow. Vercel's
-Production and Preview environment settings remain separate. CI needs network
-access to the configured backend. A GitHub billing/spending-limit failure prevents the job from
-starting and must be resolved in the account settings independently of code.
+`src/lib/community/mvps.ts` validates the snapshot at module load and projects
+only public card/search fields into React. The base directory and all paginated
+paths are generated statically at build time; malformed and out-of-range paths
+return 404, and `/page/1` permanently redirects to the base route while retaining
+query parameters. Neither production builds nor page requests need
+`DEVHUB_BACKEND_URL` for the MVP experience. Updating the official roster
+requires a deliberate snapshot refresh and redeploy.
+
+The preserved backend loader still batches records in groups of 100, validates
+complete responses, strips private fields, and rejects inconsistent snapshots.
+When the deferred Student Fellows routes are restored, they can continue using
+that loader and its ISR behavior without changing the static MVP boundary.
 
 Search, City/Country multiselect and pagination use this local snapshot, without
 API requests or Next.js server navigations. Values within a facet use OR;

@@ -40,5 +40,3 @@ export default async function MVPDirectoryPage({ params }: PageProps) {
     </main>
   );
 }
-
-export const revalidate = 3600;

@@ -64,26 +64,26 @@ The implementation uses the existing `Inter`, `DM Sans`, and `Geist Mono` font s
 | Student career pathways            | Custom composition | `program-requirements.tsx`, two numbered sections with native lists                                                                                 |
 | Directory headline                 | Custom composition | `directory-hero.tsx`; shared between the two data kinds                                                                                             |
 | Filters / search                   | Adapt              | Existing Popover, Checkbox, Label, InputGroup and Button; local multiselect and search with URL state and a keyboard-operable magnifier             |
-| People cards                       | Custom composition | `person-card.tsx`, backend photographs, actual names and organization, local social glyphs                                                          |
+| People cards                       | Custom composition | `person-card.tsx`, local optimized copies of official photographs and profile data, local social glyphs                                             |
 | Pagination                         | Adapt              | Existing shadcn Pagination components, real links, current-page state and ellipses                                                                  |
 | Student profile                    | Custom composition | `student-profile.tsx`, existing BackLink and SectionKicker; actual biography/highlights                                                             |
 | Bottom CTA                         | Adapt              | Existing home CTA gains optional `highlightedText`; its default remains `agentic app`. Community CTA supplies Figma titles, actions, and highlights |
 
-All substantial new sections live in `src/components/community/`. The five route files own metadata and visible section order. API fetch/schema implementation stays in the parent-owned `src/lib/community/` domain.
+All substantial new sections live in `src/components/community/`. The route files own metadata and visible section order. Static MVP data and the preserved API fetch/schema implementation stay in the parent-owned `src/lib/community/` domain.
 
 Small shared changes: `src/components/home/cta.tsx`, `src/components/footer.tsx`, and `src/css/custom.css`. The added `db-paper` token preserves the Figma light surface (`#f9f7f4`) inside the site's existing dark root. No dependencies, header logic, or image optimizer configuration were changed by this frontend work.
 
 ## Data and interaction contract
 
-- Directories load all published records through `getDirectory` and render with hourly ISR. They never contain a checked-in frontend seed or synthetic participant records.
+- The MVP directory loads the checked-in, schema-validated snapshot from `src/lib/community/data/mvps.json`; its official roster and public fields were verified against the Databricks MVP page on 2026-09-16. Portraits resolve to face-centered, 768×768 compressed JPEGs in `public/img/community/mvps`. The preserved backend loader remains available for the deferred Student Fellows directory.
 - City and Country are local multiselect filters in both directories. Search and pagination also use the public snapshot already loaded in the browser; changing controls makes no data request.
 - The list uses 20 records per page, matching the Figma four-column/five-row layout. Pagination uses `/page/N` (page 1 uses the base directory); search, comma-separated `country` names and repeated `city` values stay in the query string. Native history keeps all controls local. Legacy `?page=N` and repeated `country` parameters remain supported. Filtering resets to the base path; filtered results clamp to the last available page, while nonexistent unfiltered page paths return 404.
 - URL values are normalized locally; page is a safe integer in 1–100000, `q` is capped at 200 characters, each City/Country value at 100. Cohort and Expertise remain API capabilities and are not exposed by these Figma-aligned controls.
 - Student cards navigate to `/student-fellows/fellows/[slug]`. MVP cards link to an actual published external website/social profile; no unrequested MVP detail route is created.
 - The profile rejects missing records and `kind !== "student"` with `notFound()`. Highlights render only when supplied by the backend. Missing biographies, organizations, expertise, locations, and social URLs do not generate invented copy.
 - Service errors propagate to a retryable route error boundary; failed ISR regeneration retains the previous successful page. Empty successful searches have their own “No matches found” state and clear-filters link. Unknown student slugs remain 404s, distinct from service outages.
-- Directory and profile fetches use hourly revalidation. See `community-backend.md` for freshness, build-time backend availability and cache invalidation limitations.
-- Every page has a specific title, description, and canonical. Paginated directory paths serve their corresponding cards in ISR HTML, with page-specific titles and canonicals. Directory query URLs share that path's static metadata, canonicalize to the path without query parameters and retain `noindex, follow` through an HTTP header; public profile pages add escaped JSON-LD using `ProfilePage`, `Person`, and educational `affiliation` (not an unsupported graduation claim). Sitemap integration is parent-owned.
+- MVP directory pages are generated statically from the local snapshot. Deferred Student directory and profile routes retain hourly backend revalidation when restored. See `community-backend.md` for the complete boundary.
+- Every page has a specific title, description, and canonical. Paginated MVP paths serve their corresponding cards in static HTML, with page-specific titles and canonicals. Directory query URLs share that path's static metadata, canonicalize to the path without query parameters and retain `noindex, follow` through an HTTP header; public profile pages add escaped JSON-LD using `ProfilePage`, `Person`, and educational `affiliation` (not an unsupported graduation claim). Sitemap integration is parent-owned.
 
 Verified CTA destinations:
 

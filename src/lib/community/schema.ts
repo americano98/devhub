@@ -25,7 +25,9 @@ export const publicPersonSchema = z.object({
   photoUrl: z.union([
     z.literal(""),
     externalUrl,
-    z.string().regex(/^\/headshots\/[a-zA-Z0-9._/-]+$/),
+    z
+      .string()
+      .regex(/^\/(?:headshots|img\/community\/mvps)\/[a-zA-Z0-9._/-]+$/),
   ]),
   links: z.object({
     linkedin: externalUrl.optional(),
