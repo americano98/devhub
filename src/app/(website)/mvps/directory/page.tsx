@@ -21,6 +21,7 @@ export async function generateMetadata({ params }: PageProps) {
     title: directoryTitle("mvp", page),
     description:
       "Meet experts who share knowledge, build community, and grow the Databricks ecosystem.",
+    imagePath: "/img/community/mvp-og-image.jpg",
     pathname: directoryHref("mvp", {}, page),
   });
 }

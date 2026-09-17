@@ -10,6 +10,7 @@ export const metadata = getMetadata({
   title: "Databricks MVPs",
   description:
     "How Databricks recognizes and supports experts in the Data + AI community. Explore program benefits, meet the MVPs, and nominate a peer.",
+  imagePath: "/img/community/mvp-og-image.jpg",
   pathname: "/mvps",
 });
 
