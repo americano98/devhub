@@ -51,6 +51,27 @@
       "featured": false
     },
     {
+      "id": "mvp-abishek-subramanian",
+      "slug": "mvp-abishek-subramanian",
+      "kind": "mvp",
+      "name": "Abishek Subramanian",
+      "headline": "Associate Director, Databricks CoE",
+      "bio": "",
+      "country": "India",
+      "city": "Bengaluru",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-abishek-subramanian.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/abishek-subramanian/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
       "id": "mvp-adi-polak",
       "slug": "mvp-adi-polak",
       "kind": "mvp",
@@ -87,6 +108,70 @@
       "photoUrl": "/img/community/mvps/mvp-ajay-kumar-pandey.jpg",
       "links": {
         "linkedin": "https://www.linkedin.com/in/ajaypanday678"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-aladdin-alchalabi",
+      "slug": "mvp-aladdin-alchalabi",
+      "kind": "mvp",
+      "name": "Aladdin Alchalabi",
+      "headline": "Senior Solutions Engineer, Cloud and AI Data",
+      "bio": "",
+      "country": "Canada",
+      "city": "Stittsville",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-aladdin-alchalabi.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/alaaeddinalchalabi"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-alex-barreto",
+      "slug": "mvp-alex-barreto",
+      "kind": "mvp",
+      "name": "Alex Barreto",
+      "headline": "",
+      "bio": "",
+      "country": "United States",
+      "city": "Murfreesboro",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-alex-barreto.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/alexxx-db"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-alex-cole",
+      "slug": "mvp-alex-cole",
+      "kind": "mvp",
+      "name": "Alex Cole",
+      "headline": "Lead Architect - Databricks",
+      "bio": "",
+      "country": "United Kingdom",
+      "city": "Bristol",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-alex-cole.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/alexcole01/",
+        "website": "https://www.alexcole.net/"
       },
       "additionalLinks": [],
       "expertise": [],
@@ -132,6 +217,32 @@
         "linkedin": "https://www.linkedin.com/in/andrew-sitz/"
       },
       "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-angel-alvarez",
+      "slug": "mvp-angel-alvarez",
+      "kind": "mvp",
+      "name": "Angel Alvarez",
+      "headline": "Data Specialist Lead",
+      "bio": "",
+      "country": "Spain",
+      "city": "Tres Cantos",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-angel-alvarez.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/angel-alvarez-pascua/"
+      },
+      "additionalLinks": [
+        {
+          "label": "Medium",
+          "url": "https://medium.com/@angel.alvarez.pascua"
+        }
+      ],
       "expertise": [],
       "highlights": [],
       "status": "published",
@@ -198,6 +309,27 @@
       "photoUrl": "/img/community/mvps/mvp-awadelrahman-m-a-ahmed.jpg",
       "links": {
         "linkedin": "https://www.linkedin.com/in/awadelrahman/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-balaji-j",
+      "slug": "mvp-balaji-j",
+      "kind": "mvp",
+      "name": "Balaji J",
+      "headline": "Databricks Architect",
+      "bio": "",
+      "country": "India",
+      "city": "Chennai",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-balaji-j.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/balajij8"
       },
       "additionalLinks": [],
       "expertise": [],
@@ -319,6 +451,27 @@
       "featured": false
     },
     {
+      "id": "mvp-daiki-mawatari",
+      "slug": "mvp-daiki-mawatari",
+      "kind": "mvp",
+      "name": "Daiki Mawatari",
+      "headline": "Data Engineering Team Manager",
+      "bio": "",
+      "country": "Japan",
+      "city": "Yokohama",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-daiki-mawatari.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/daikimawatari/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
       "id": "mvp-dan-williams",
       "slug": "mvp-dan-williams",
       "kind": "mvp",
@@ -337,6 +490,32 @@
         {
           "label": "YouTube",
           "url": "https://www.youtube.com/@DecisionForest"
+        }
+      ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-daniel-beach",
+      "slug": "mvp-daniel-beach",
+      "kind": "mvp",
+      "name": "Daniel Beach",
+      "headline": "Senior Data Engineer",
+      "bio": "",
+      "country": "United States",
+      "city": "Ankeny",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-daniel-beach.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/danieldavidbeach/"
+      },
+      "additionalLinks": [
+        {
+          "label": "Substack",
+          "url": "https://dataengineeringcentral.substack.com/"
         }
       ],
       "expertise": [],
@@ -446,27 +625,6 @@
       "featured": false
     },
     {
-      "id": "mvp-doug-macwilliams",
-      "slug": "mvp-doug-macwilliams",
-      "kind": "mvp",
-      "name": "Doug MacWilliams",
-      "headline": "Director of Data",
-      "bio": "",
-      "country": "United States",
-      "city": "Chicago",
-      "organization": "",
-      "cohort": "",
-      "photoUrl": "/img/community/mvps/mvp-doug-macwilliams.jpg",
-      "links": {
-        "linkedin": "https://www.linkedin.com/in/doug-macwilliams-4a85511/"
-      },
-      "additionalLinks": [],
-      "expertise": [],
-      "highlights": [],
-      "status": "published",
-      "featured": false
-    },
-    {
       "id": "mvp-domonkos-pal",
       "slug": "mvp-domonkos-pal",
       "kind": "mvp",
@@ -489,11 +647,32 @@
       "featured": false
     },
     {
+      "id": "mvp-doug-macwilliams",
+      "slug": "mvp-doug-macwilliams",
+      "kind": "mvp",
+      "name": "Doug MacWilliams",
+      "headline": "Director of Data",
+      "bio": "",
+      "country": "United States",
+      "city": "Chicago",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-doug-macwilliams.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/doug-macwilliams-4a85511/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
       "id": "mvp-dr-alan-l-dennis",
       "slug": "mvp-dr-alan-l-dennis",
       "kind": "mvp",
       "name": "Dr. Alan L. Dennis",
-      "headline": "Director I Author",
+      "headline": "VP AI and Data Platform Innovation - Alliances",
       "bio": "",
       "country": "United States",
       "city": "New Mat",
@@ -970,6 +1149,83 @@
       "featured": false
     },
     {
+      "id": "mvp-kelly-zelenko",
+      "slug": "mvp-kelly-zelenko",
+      "kind": "mvp",
+      "name": "Kelly Zelenko",
+      "headline": "Machine Learning and AI Manager",
+      "bio": "",
+      "country": "United States",
+      "city": "Pittsburgh",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-kelly-zelenko.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/kelly-zelenko/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-kristian-johannesen",
+      "slug": "mvp-kristian-johannesen",
+      "kind": "mvp",
+      "name": "Kristian Johannesen",
+      "headline": "Consulting Manager and Senior Business Analytics Architect",
+      "bio": "",
+      "country": "Denmark",
+      "city": "Aalborg",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-kristian-johannesen.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/kristian-johannesen"
+      },
+      "additionalLinks": [
+        {
+          "label": "YouTube",
+          "url": "https://youtube.com/@5minutefeatures"
+        },
+        {
+          "label": "Sessionize",
+          "url": "https://sessionize.com/KristianJohannesen/"
+        }
+      ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-kushagra-verma",
+      "slug": "mvp-kushagra-verma",
+      "kind": "mvp",
+      "name": "Kushagra Verma",
+      "headline": "Data Engineer",
+      "bio": "",
+      "country": "India",
+      "city": "Kolkata",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-kushagra-verma.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/2kushagraverma3/"
+      },
+      "additionalLinks": [
+        {
+          "label": "Medium",
+          "url": "https://medium.com/@kushagraid"
+        }
+      ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
       "id": "mvp-kyjah-keys",
       "slug": "mvp-kyjah-keys",
       "kind": "mvp",
@@ -998,32 +1254,6 @@
       "featured": false
     },
     {
-      "id": "mvp-laurenz-wuttke",
-      "slug": "mvp-laurenz-wuttke",
-      "kind": "mvp",
-      "name": "Laurenz Wuttke",
-      "headline": "Chief Technical Officer",
-      "bio": "",
-      "country": "Germany",
-      "city": "Cologne",
-      "organization": "",
-      "cohort": "",
-      "photoUrl": "/img/community/mvps/mvp-laurenz-wuttke.jpg",
-      "links": {
-        "linkedin": "https://www.linkedin.com/in/laurenz-wuttke/"
-      },
-      "additionalLinks": [
-        {
-          "label": "YouTube",
-          "url": "https://www.youtube.com/@datasolut"
-        }
-      ],
-      "expertise": [],
-      "highlights": [],
-      "status": "published",
-      "featured": false
-    },
-    {
       "id": "mvp-lara-rachidi",
       "slug": "mvp-lara-rachidi",
       "kind": "mvp",
@@ -1043,6 +1273,32 @@
         {
           "label": "YouTube",
           "url": "https://www.youtube.com/@VectorLab"
+        }
+      ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-laurenz-wuttke",
+      "slug": "mvp-laurenz-wuttke",
+      "kind": "mvp",
+      "name": "Laurenz Wuttke",
+      "headline": "Chief Technical Officer",
+      "bio": "",
+      "country": "Germany",
+      "city": "Cologne",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-laurenz-wuttke.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/laurenz-wuttke/"
+      },
+      "additionalLinks": [
+        {
+          "label": "YouTube",
+          "url": "https://www.youtube.com/@datasolut"
         }
       ],
       "expertise": [],
@@ -1090,6 +1346,32 @@
         "linkedin": "https://www.linkedin.com/in/luanmoreno/"
       },
       "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-lucas-mengual",
+      "slug": "mvp-lucas-mengual",
+      "kind": "mvp",
+      "name": "Lucas Mengual",
+      "headline": "Data Architect",
+      "bio": "",
+      "country": "Netherlands",
+      "city": "Veenendaal",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-lucas-mengual.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/lucasmengual/"
+      },
+      "additionalLinks": [
+        {
+          "label": "Substack",
+          "url": "https://hablandodedata.substack.com/"
+        }
+      ],
       "expertise": [],
       "highlights": [],
       "status": "published",
@@ -1191,6 +1473,28 @@
       "featured": false
     },
     {
+      "id": "mvp-martin-debus",
+      "slug": "mvp-martin-debus",
+      "kind": "mvp",
+      "name": "Martin Debus",
+      "headline": "Senior Consultant Managing Director",
+      "bio": "",
+      "country": "Germany",
+      "city": "Hamburg",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-martin-debus.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/martin-debus",
+        "website": "https://www.thelakehousepath.com"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
       "id": "mvp-mate-gulyas",
       "slug": "mvp-mate-gulyas",
       "kind": "mvp",
@@ -1212,6 +1516,32 @@
       "featured": false
     },
     {
+      "id": "mvp-matt-weingarten",
+      "slug": "mvp-matt-weingarten",
+      "kind": "mvp",
+      "name": "Matt Weingarten",
+      "headline": "Data Engineer IV",
+      "bio": "",
+      "country": "United States",
+      "city": "Tampa",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-matt-weingarten.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/matthewweingarten201/"
+      },
+      "additionalLinks": [
+        {
+          "label": "Medium",
+          "url": "https://medium.com/@matt_weingarten"
+        }
+      ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
       "id": "mvp-maulik-dixit",
       "slug": "mvp-maulik-dixit",
       "kind": "mvp",
@@ -1225,6 +1555,28 @@
       "photoUrl": "/img/community/mvps/mvp-maulik-dixit.jpg",
       "links": {
         "linkedin": "https://www.linkedin.com/in/maulik-dixit/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-mauro-loprete",
+      "slug": "mvp-mauro-loprete",
+      "kind": "mvp",
+      "name": "Mauro Loprete",
+      "headline": "Data Engineer",
+      "bio": "",
+      "country": "Uruguay",
+      "city": "Montevideo",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-mauro-loprete.jpg",
+      "links": {
+        "website": "https://mauroloprete.github.io/mauroloprete/en/blog/",
+        "linkedin": "https://www.linkedin.com/in/mauro-loprete/"
       },
       "additionalLinks": [],
       "expertise": [],
@@ -1267,6 +1619,75 @@
       "photoUrl": "/img/community/mvps/mvp-miguel-diaz.jpg",
       "links": {
         "linkedin": "https://www.linkedin.com/in/migueldr/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-narender-kumar",
+      "slug": "mvp-narender-kumar",
+      "kind": "mvp",
+      "name": "Narender Kumar",
+      "headline": "Senior Architect",
+      "bio": "",
+      "country": "India",
+      "city": "Fatehabad",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-narender-kumar.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/narender-kumar91/",
+        "github": "https://github.com/databeli"
+      },
+      "additionalLinks": [
+        {
+          "label": "YouTube",
+          "url": "https://www.youtube.com/@DataBeli"
+        }
+      ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-nathan-sundararajan",
+      "slug": "mvp-nathan-sundararajan",
+      "kind": "mvp",
+      "name": "Nathan Sundararajan",
+      "headline": "Manager, Data Engineering",
+      "bio": "",
+      "country": "United States",
+      "city": "Wesley Chapel",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-nathan-sundararajan.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/renganathans/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-nicanor-medina",
+      "slug": "mvp-nicanor-medina",
+      "kind": "mvp",
+      "name": "Nicanor Medina",
+      "headline": "Director of Sales Engineering",
+      "bio": "",
+      "country": "Spain",
+      "city": "Torrejón de Ardoz",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-nicanor-medina.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/nicanormedina/"
       },
       "additionalLinks": [],
       "expertise": [],
@@ -1540,6 +1961,30 @@
       "featured": false
     },
     {
+      "id": "mvp-reid-havens",
+      "slug": "mvp-reid-havens",
+      "kind": "mvp",
+      "name": "Reid Havens",
+      "headline": "Co-Founder and CTO",
+      "bio": "",
+      "country": "United States",
+      "city": "Kirkland",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-reid-havens.jpg",
+      "links": {},
+      "additionalLinks": [
+        {
+          "label": "YouTube",
+          "url": "https://www.youtube.com/@AnalyticEndeavors"
+        }
+      ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
       "id": "mvp-rishabh-pandey",
       "slug": "mvp-rishabh-pandey",
       "kind": "mvp",
@@ -1612,6 +2057,28 @@
       "featured": false
     },
     {
+      "id": "mvp-ryoichi-miura",
+      "slug": "mvp-ryoichi-miura",
+      "kind": "mvp",
+      "name": "Ryoichi Miura",
+      "headline": "Chief AI Engineer",
+      "bio": "",
+      "country": "Japan",
+      "city": "Yokohama",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-ryoichi-miura.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/ryoichi-miura-511760190",
+        "x": "https://x.com/rmiura60465?s=21"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
       "id": "mvp-sai-nageshwaran",
       "slug": "mvp-sai-nageshwaran",
       "kind": "mvp",
@@ -1646,6 +2113,27 @@
       "photoUrl": "/img/community/mvps/mvp-scott-davis.jpg",
       "links": {
         "linkedin": "https://www.linkedin.com/in/4scottdavis/"
+      },
+      "additionalLinks": [],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-shamen-paris",
+      "slug": "mvp-shamen-paris",
+      "kind": "mvp",
+      "name": "Shamen Paris",
+      "headline": "Senior Developer",
+      "bio": "",
+      "country": "United Kingdom",
+      "city": "LEICESTER",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-shamen-paris.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/shamen-paris-235b18156/"
       },
       "additionalLinks": [],
       "expertise": [],
@@ -1697,27 +2185,6 @@
       "featured": false
     },
     {
-      "id": "mvp-shubham-kumar",
-      "slug": "mvp-shubham-kumar",
-      "kind": "mvp",
-      "name": "Shubham Kumar",
-      "headline": "Associate I Data Engineer",
-      "bio": "",
-      "country": "India",
-      "city": "Nawada",
-      "organization": "",
-      "cohort": "",
-      "photoUrl": "/img/community/mvps/mvp-shubham-kumar.jpg",
-      "links": {
-        "linkedin": "https://www.linkedin.com/in/shubhamkrsh"
-      },
-      "additionalLinks": [],
-      "expertise": [],
-      "highlights": [],
-      "status": "published",
-      "featured": false
-    },
-    {
       "id": "mvp-shraddha-shetty",
       "slug": "mvp-shraddha-shetty",
       "kind": "mvp",
@@ -1738,6 +2205,27 @@
           "url": "https://medium.com/@dataninsight"
         }
       ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-shubham-kumar",
+      "slug": "mvp-shubham-kumar",
+      "kind": "mvp",
+      "name": "Shubham Kumar",
+      "headline": "Associate I Data Engineer",
+      "bio": "",
+      "country": "India",
+      "city": "Nawada",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-shubham-kumar.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/shubhamkrsh"
+      },
+      "additionalLinks": [],
       "expertise": [],
       "highlights": [],
       "status": "published",
@@ -1765,6 +2253,27 @@
           "url": "https://www.youtube.com/c/advancinganalytics"
         }
       ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-soufiane-darraz",
+      "slug": "mvp-soufiane-darraz",
+      "kind": "mvp",
+      "name": "Soufiane Darraz",
+      "headline": "Owner I Data Platform Engineer",
+      "bio": "",
+      "country": "Netherlands",
+      "city": "Amsterdam",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-soufiane-darraz.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/soufiane-darraz/"
+      },
+      "additionalLinks": [],
       "expertise": [],
       "highlights": [],
       "status": "published",
@@ -1839,27 +2348,6 @@
       "featured": false
     },
     {
-      "id": "mvp-soufiane-darraz",
-      "slug": "mvp-soufiane-darraz",
-      "kind": "mvp",
-      "name": "Soufiane Darraz",
-      "headline": "Owner I Data Platform Engineer",
-      "bio": "",
-      "country": "Netherlands",
-      "city": "Amsterdam",
-      "organization": "",
-      "cohort": "",
-      "photoUrl": "/img/community/mvps/mvp-soufiane-darraz.jpg",
-      "links": {
-        "linkedin": "https://www.linkedin.com/in/soufiane-darraz/"
-      },
-      "additionalLinks": [],
-      "expertise": [],
-      "highlights": [],
-      "status": "published",
-      "featured": false
-    },
-    {
       "id": "mvp-subramanian-iyer",
       "slug": "mvp-subramanian-iyer",
       "kind": "mvp",
@@ -1926,6 +2414,40 @@
         {
           "label": "Medium",
           "url": "https://medium.com/@sudhir.gajre/"
+        }
+      ],
+      "expertise": [],
+      "highlights": [],
+      "status": "published",
+      "featured": false
+    },
+    {
+      "id": "mvp-szymon-dybczak",
+      "slug": "mvp-szymon-dybczak",
+      "kind": "mvp",
+      "name": "Szymon Dybczak",
+      "headline": "Data Engineer",
+      "bio": "",
+      "country": "Poland",
+      "city": "Warszawa",
+      "organization": "",
+      "cohort": "",
+      "photoUrl": "/img/community/mvps/mvp-szymon-dybczak.jpg",
+      "links": {
+        "linkedin": "https://www.linkedin.com/in/szymon-dybczak/"
+      },
+      "additionalLinks": [
+        {
+          "label": "Databricks Community",
+          "url": "https://community.databricks.com/t5/user/viewprofilepage/user-id/110502"
+        },
+        {
+          "label": "Reddit",
+          "url": "https://www.reddit.com/user/szymon_dybczak/"
+        },
+        {
+          "label": "Medium",
+          "url": "https://medium.com/@sdybczak2382"
         }
       ],
       "expertise": [],
@@ -2059,6 +2581,13 @@
       "highlights": [],
       "status": "published",
       "featured": false
+    }
+  ],
+  "supplementalSources": [
+    {
+      "source": "PixelPoint MVP List.xlsx",
+      "verifiedAt": "2026-09-18",
+      "description": "22 additional members supplied by the user; 17 portraits from https://devhub-im7f77p6p-pixelpoint.vercel.app/mvps/directory and four from the supplied mvps folder. Angel Alvarez uses a user-supplied circular portrait expanded to a square with ImageGen."
     }
   ]
 }

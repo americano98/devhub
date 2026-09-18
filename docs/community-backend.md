@@ -17,7 +17,9 @@ The MVP directory reads the checked-in snapshot at
 `src/lib/community/data/mvps.json`. Its roster, public profile fields, images,
 and links were reconciled against the official
 [Databricks MVP page](https://www.databricks.com/discover/mvps), which is the
-source of truth. The existing `devhub-backend` client remains available for
+source of truth for the initial 87 members. The user-supplied spreadsheet
+explicitly supplements that roster with 22 additional members (see below).
+The existing `devhub-backend` client remains available for
 Student Fellows and future administrative workflows, but it is not used to
 render MVPs.
 
@@ -63,11 +65,19 @@ accepted into the rendered contract.
 
 ## Rendering and freshness
 
-The MVP snapshot contains 87 official members and was verified on 2026-09-16.
-All 87 matched records in the admin export. Twenty-two admin-only records were
-excluded because they were absent from the official page, and the official
-“Director I Author” title was used for Dr. Alan L. Dennis instead of the
-conflicting backend title. Country casing and admin-only city metadata remain
+The MVP snapshot contains 109 members: 87 official members verified on
+2026-09-16 and 22 additions explicitly supplied in `PixelPoint MVP List.xlsx`
+on 2026-09-18. The additions use spreadsheet names, locations, titles, and
+social links. Seventeen portraits were imported from the supplied DevHub
+preview as local 768×768 JPEGs, and four more were imported from the supplied
+local `mvps` folder. Angel Alvarez uses a user-supplied circular portrait with
+the white corners filled using ImageGen to produce a square photograph.
+All 109 members now have local portraits. USA/UK country labels and whitespace
+are normalized, and the missing
+title marker `Not found` is stored as an empty title. At the user's request,
+Dr. Alan L. Dennis uses the spreadsheet title
+“VP AI and Data Platform Innovation - Alliances”. The other original records
+remain unchanged. Country casing and admin-only city metadata remain
 normalized for the existing filters.
 
 `src/lib/community/mvps.ts` validates the snapshot at module load and projects
