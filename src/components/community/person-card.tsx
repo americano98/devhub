@@ -103,7 +103,7 @@ function PersonPhoto({
           height={352}
           loading={eager ? "eager" : "lazy"}
           decoding="async"
-          className="h-full w-full object-cover object-top grayscale"
+          className="h-full w-full object-cover object-top"
         />
       ) : (
         <img
